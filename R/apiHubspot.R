@@ -226,7 +226,7 @@ getHubspotContacts <- function(APIKEY, listID="2133"){
         this.raw.content <- content(GET(url = url), "text")
         this.content <- fromJSON(this.raw.content)
 
-        contactslist[[n]]<-toTable(APIKEY, this.content)
+        contactslist[[n]]<-toTable(APIKEY = APIKEY_VALUE, hubscontent = this.content)
 
         n<-n+1
     }
