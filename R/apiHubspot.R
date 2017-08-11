@@ -13,13 +13,13 @@ library(tidyr)
 
 #recebe lista de contatos do hubspot e retorna tabela com propriedades a partir disto
 toTable <- function(APIKEY,hubscontent){
-    colunas = 42
+    colunas = 43
     final<- data.frame(matrix(ncol=colunas))
     names(final)<-c("email","account_id","lead_source_geral_new","lead_source_new","hubspot_owner_id","opp_new_date","lifecyclestage","deal_stage","became_customer_new"
                     ,"lost_reason","tpv_novo_comercial","condition","faturamento_grupo","reuniao_date","prim_contato_date","qualificado_date","prop_enviada_date"
                     ,"prop_aceita_date","em_integracao_date","integrado_date","convertido_date","nao_e_pra_agora_date","perdido_date","hs_lifecyclestage_lead_date"
                     ,"hs_lifecyclestage_marketingqualifiedlead_date","ecommerce_platform","hubspotscore","receita_ano","receita_mes","receita_total","total_tpv"
-                    ,"tpv_ano","tpv_anteontem","tpv_ontem","tpv_max","tpv_mes","tpv_mes_1","tpv_mes_2","tpv_mes_3","monthly_revenue","resposta_inicial","lastmodifieddate")
+                    ,"tpv_ano","tpv_anteontem","tpv_ontem","tpv_max","tpv_mes","tpv_mes_1","tpv_mes_2","tpv_mes_3","monthly_revenue","resposta_inicial","lastmodifieddate","createdate")
     for(i in 1:length(hubscontent)){
         final[i,]<-NA
         final[i,1] <- ifelse(is.null(hubscontent[[i]]$properties$email$value),NA,hubscontent[[i]]$properties$email$value)
@@ -64,6 +64,7 @@ toTable <- function(APIKEY,hubscontent){
         final[i,40] <- ifelse(is.null(hubscontent[[i]]$properties$monthly_revenue$value),NA,hubscontent[[i]]$properties$monthly_revenue$value)
         final[i,41] <- ifelse(is.null(hubscontent[[i]]$properties$resposta_inicial$value),NA,hubscontent[[i]]$properties$resposta_inicial$value)
         final[i,42] <- ifelse(is.null(hubscontent[[i]]$properties$lastmodifieddate$value),NA,hubscontent[[i]]$properties$lastmodifieddate$value)
+        final[i,43] <- ifelse(is.null(hubscontent[[i]]$properties$createdate$value),NA,hubscontent[[i]]$properties$createdate$value)
     }
     #add owners name and email
     owners <- getOwners(APIKEY)
@@ -85,6 +86,7 @@ toTable <- function(APIKEY,hubscontent){
     final$hs_lifecyclestage_lead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_lead_date)/1000, origin="1970-01-01"))
     final$hs_lifecyclestage_marketingqualifiedlead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_marketingqualifiedlead_date)/1000, origin="1970-01-01"))
     final$lastmodifieddate<-as.Date(as.POSIXlt(as.numeric(final$lastmodifieddate)/1000, origin="1970-01-01"))
+    final$createdate<-as.Date(as.POSIXlt(as.numeric(final$createdate)/1000, origin="1970-01-01"))
 
     return(final)
 }
@@ -932,7 +934,7 @@ plotFunilComercial <- function(funil, title = "Funil Comercial",subtitle = "", c
              stat='identity', position='stack') +
     geom_text(data=funil,
               aes(y=total/2, label= paste(ncontacts)),
-              color='white',size = 6) +
+              color='white',size = 8, fontface = "bold") +
     scale_fill_manual(values = c(color, NA) ) +
     coord_flip() +
     theme(legend.position = 'none',
@@ -946,7 +948,7 @@ plotFunilComercial <- function(funil, title = "Funil Comercial",subtitle = "", c
   p2 <- ggplot(funil, aes(x=deal_stage, y=efficiency)) +
     geom_bar(stat='identity',fill=fill) +
     geom_text(aes(y = 15, label = paste(round(efficiency), '%',sep="")),
-              color="white",size = 6) +
+              color="white",size = 7, fontface = "bold") +
     scale_fill_manual(values = c(color)) +
     coord_flip() +
     theme(legend.position = 'none',
@@ -960,10 +962,10 @@ plotFunilComercial <- function(funil, title = "Funil Comercial",subtitle = "", c
 
 
   if (subtitle!=""){
-    tg <- textGrob(paste(title," -",subtitle), gp=gpar(fontsize=20))
+    tg <- textGrob(paste(title," -",subtitle), gp=gpar(fontsize=23))
   }
   else {
-    tg <- textGrob(paste(title), gp=gpar(fontsize=20))
+    tg <- textGrob(paste(title), gp=gpar(fontsize=23))
   }
   grid.arrange(p1, p2, ncol=2, widths=c(4,1), top=tg)
 }
@@ -975,14 +977,15 @@ plotGruposdeFaturamento <- function(grupo_faturamento, title = "Grupos de Fatura
   p<-ggplot(grupo_faturamento, aes(x=grupo_faturamento, y=ncontacts, fill=grupo_faturamento)) +
     geom_bar(stat="identity")+scale_fill_brewer(palette=color) +
     geom_text(data=grupo_faturamento,
-              aes(y=ncontacts, label= paste(ncontacts),vjust=ifelse(ncontacts>0,1,0)),size = 5) +
+              aes(y=ncontacts, label= paste(ncontacts),vjust=ifelse(ncontacts>0,1,0)),size = 8,
+              fontface = "bold") +
     theme(legend.position = 'none',
           axis.title.x=element_blank(),
           axis.ticks.x=element_blank(),
           axis.title.y=element_blank(),
           axis.text.x = element_text(size = 15),
           axis.text.y = element_blank(),
-          plot.title = element_text(size=20)) +
+          plot.title = element_text(size=23)) +
     ggtitle(title)
   grid.arrange(p)
 
