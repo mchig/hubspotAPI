@@ -1458,7 +1458,7 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
   grp <- group_by(data,account_id)
   fdTPV <- summarise(grp, first_payment = min(payment_date))
   ldTPV <- summarise(grp, last_payment = max(payment_date))
-  data <- merge(data,fdTPV,ldTPV, by = "account_id", all = TRUE)
+  data <- Reduce(function(x, y) merge(x, y, by = "account_id", all=TRUE), list(data,fdTPV,ldTPV))
 
   data$m <- ((year(data$payment_date) - year(data$first_payment))*12 + (month(data$payment_date) - month(data$first_payment)))
 
@@ -1625,10 +1625,20 @@ filtraCohort <- function(lista_clientes, churn_time, churn_month) {
   month_min <- month_now - (churn_time-1)/12
   month_max <- month_now - (churn_month)/12
 
-  lista_clientes$m_novo <- paste0("M",lista_clientes$m)
-  final <- dcast(data = lista_clientes, account_id + login + first_payment + tpv_group  ~ m_novo, value.var = "tpv")
-  final <- final[final$first_payment <= month_max,]
-  final <- final[is.na(final[,which(names(final)==paste0("M",churn_month))]),]
+  if(churn_month!=0){
+
+    #lista_clientes$m_novo <- paste0("M",lista_clientes$m)
+    lista_clientes$m_novo <- lista_clientes$m
+    final <- dcast(data = lista_clientes, account_id + login + first_payment + last_payment + tpv_group  ~ m_novo, value.var = "tpv")
+    final <- final[final$first_payment <= month_max,]
+    final <- final[is.na(final[,which(names(final)==churn_month)]),]
+  }else {
+
+    #lista_clientes$m_novo <- paste0("M",lista_clientes$m)
+    lista_clientes$m_novo <- lista_clientes$m
+    final <- dcast(data = lista_clientes, account_id + login + first_payment + last_payment + tpv_group  ~ m_novo, value.var = "tpv")
+    final <- final[final$last_payment < month_now,]
+  }
 
   return (final)
 }
