@@ -90,7 +90,6 @@ toTable <- function(APIKEY,hubscontent){
 
     return(final)
 }
-
 #retorna tabela de IDs do hubspot com seus respectivos owners e emails
 getOwners <- function(APIKEY){
     APIKEY_VALUE <- APIKEY
@@ -111,7 +110,6 @@ getOwners <- function(APIKEY){
     owners<-data.frame(hubspot_owner_id,hubspot_owner_name,hubspot_owner_email)
     return(owners)
 }
-
 #arruma data de contatos
 arrangeDate <- function(contatosHub){
 
@@ -132,11 +130,45 @@ arrangeDate <- function(contatosHub){
     contatosHub$convertido_date[!is.na(contatosHub$reuniao_date) &
                                     !is.na(contatosHub$convertido_date) &
                                     contatosHub$reuniao_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$prim_contato_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$prim_contato_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$qualificado_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$qualificado_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$prop_enviada_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$prop_enviada_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$prop_aceita_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$prop_aceita_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$em_integracao_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$em_integracao_date>contatosHub$convertido_date] <- NA
+    contatosHub$convertido_date[!is.na(contatosHub$integrado_date) &
+                                  !is.na(contatosHub$convertido_date) &
+                                  contatosHub$integrado_date>contatosHub$convertido_date] <- NA
+
 
     #colocar NA em contatos com #integrado# date menor que reuniao e colocar a data de convertido em integrado com NA mas com convertido date
     contatosHub$integrado_date[!is.na(contatosHub$reuniao_date) &
                                    !is.na(contatosHub$integrado_date) &
                                    contatosHub$reuniao_date>contatosHub$integrado_date] <- NA
+    contatosHub$integrado_date[!is.na(contatosHub$prim_contato_date) &
+                                 !is.na(contatosHub$integrado_date) &
+                                 contatosHub$prim_contato_date>contatosHub$integrado_date] <- NA
+    contatosHub$integrado_date[!is.na(contatosHub$qualificado_date) &
+                                 !is.na(contatosHub$integrado_date) &
+                                 contatosHub$qualificado_date>contatosHub$integrado_date] <- NA
+    contatosHub$integrado_date[!is.na(contatosHub$prop_enviada_date) &
+                                 !is.na(contatosHub$integrado_date) &
+                                 contatosHub$prop_enviada_date>contatosHub$integrado_date] <- NA
+    contatosHub$integrado_date[!is.na(contatosHub$prop_aceita_date) &
+                                 !is.na(contatosHub$integrado_date) &
+                                 contatosHub$prop_aceita_date>contatosHub$integrado_date] <- NA
+    contatosHub$integrado_date[!is.na(contatosHub$em_integracao_date) &
+                                 !is.na(contatosHub$integrado_date) &
+                                 contatosHub$em_integracao_date>contatosHub$integrado_date] <- NA
     contatosHub$integrado_date[is.na(contatosHub$integrado_date) &
                                    !is.na(contatosHub$convertido_date)] <- contatosHub$convertido_date[is.na(contatosHub$integrado_date) &
                                                                                                            !is.na(contatosHub$convertido_date)]
@@ -144,6 +176,18 @@ arrangeDate <- function(contatosHub){
     contatosHub$em_integracao_date[!is.na(contatosHub$reuniao_date) &
                                        !is.na(contatosHub$em_integracao_date) &
                                        contatosHub$reuniao_date>contatosHub$em_integracao_date] <- NA
+    contatosHub$em_integracao_date[!is.na(contatosHub$prim_contato_date) &
+                                     !is.na(contatosHub$em_integracao_date) &
+                                     contatosHub$prim_contato_date>contatosHub$em_integracao_date] <- NA
+    contatosHub$em_integracao_date[!is.na(contatosHub$qualificado_date) &
+                                     !is.na(contatosHub$em_integracao_date) &
+                                     contatosHub$qualificado_date>contatosHub$em_integracao_date] <- NA
+    contatosHub$em_integracao_date[!is.na(contatosHub$prop_enviada_date) &
+                                     !is.na(contatosHub$em_integracao_date) &
+                                     contatosHub$prop_enviada_date>contatosHub$em_integracao_date] <- NA
+    contatosHub$em_integracao_date[!is.na(contatosHub$prop_aceita_date) &
+                                     !is.na(contatosHub$em_integracao_date) &
+                                     contatosHub$prop_aceita_date>contatosHub$em_integracao_date] <- NA
     contatosHub$em_integracao_date[is.na(contatosHub$em_integracao_date) &
                                        !is.na(contatosHub$integrado_date)] <- contatosHub$integrado_date[is.na(contatosHub$em_integracao_date) &
                                                                                                              !is.na(contatosHub$integrado_date)]
@@ -151,6 +195,15 @@ arrangeDate <- function(contatosHub){
     contatosHub$prop_aceita_date[!is.na(contatosHub$reuniao_date) &
                                      !is.na(contatosHub$prop_aceita_date) &
                                      contatosHub$reuniao_date>contatosHub$prop_aceita_date] <- NA
+    contatosHub$prop_aceita_date[!is.na(contatosHub$prim_contato_date) &
+                                   !is.na(contatosHub$prop_aceita_date) &
+                                   contatosHub$prim_contato_date>contatosHub$prop_aceita_date] <- NA
+    contatosHub$prop_aceita_date[!is.na(contatosHub$qualificado_date) &
+                                   !is.na(contatosHub$prop_aceita_date) &
+                                   contatosHub$qualificado_date>contatosHub$prop_aceita_date] <- NA
+    contatosHub$prop_aceita_date[!is.na(contatosHub$prop_enviada_date) &
+                                   !is.na(contatosHub$prop_aceita_date) &
+                                   contatosHub$prop_enviada_date>contatosHub$prop_aceita_date] <- NA
     contatosHub$prop_aceita_date[is.na(contatosHub$prop_aceita_date) &
                                      !is.na(contatosHub$em_integracao_date)] <- contatosHub$em_integracao_date[is.na(contatosHub$prop_aceita_date) &
                                                                                                                    !is.na(contatosHub$em_integracao_date)]
@@ -159,6 +212,13 @@ arrangeDate <- function(contatosHub){
     contatosHub$prop_enviada_date[!is.na(contatosHub$reuniao_date) &
                                       !is.na(contatosHub$prop_enviada_date) &
                                       contatosHub$reuniao_date>contatosHub$prop_enviada_date] <- NA
+    contatosHub$prop_enviada_date[!is.na(contatosHub$prim_contato_date) &
+                                    !is.na(contatosHub$prop_enviada_date) &
+                                    contatosHub$prim_contato_date>contatosHub$prop_enviada_date] <- NA
+    contatosHub$prop_enviada_date[!is.na(contatosHub$qualificado_date) &
+                                    !is.na(contatosHub$prop_enviada_date) &
+                                    contatosHub$qualificado_date>contatosHub$prop_enviada_date] <- NA
+
     contatosHub$prop_enviada_date[is.na(contatosHub$prop_enviada_date) &
                                       !is.na(contatosHub$prop_aceita_date)] <- contatosHub$prop_aceita_date[is.na(contatosHub$prop_enviada_date) &
                                                                                                                 !is.na(contatosHub$prop_aceita_date)]
@@ -166,6 +226,10 @@ arrangeDate <- function(contatosHub){
     contatosHub$qualificado_date[!is.na(contatosHub$reuniao_date) &
                                      !is.na(contatosHub$qualificado_date) &
                                      contatosHub$reuniao_date>contatosHub$qualificado_date] <- NA
+    contatosHub$qualificado_date[!is.na(contatosHub$prim_contato_date) &
+                                   !is.na(contatosHub$qualificado_date) &
+                                   contatosHub$prim_contato_date>contatosHub$qualificado_date] <- NA
+
     contatosHub$qualificado_date[is.na(contatosHub$qualificado_date) &
                                      !is.na(contatosHub$prop_enviada_date)] <- contatosHub$prop_enviada_date[is.na(contatosHub$qualificado_date) &
                                                                                                                  !is.na(contatosHub$prop_enviada_date)]
@@ -176,10 +240,9 @@ arrangeDate <- function(contatosHub){
                                       contatosHub$reuniao_date>contatosHub$prim_contato_date] <- NA
     contatosHub$prim_contato_date[is.na(contatosHub$prim_contato_date) &
                                       !is.na(contatosHub$qualificado_date)] <- contatosHub$qualificado_date[is.na(contatosHub$prim_contato_date) &
-                                                                                                                !is.na(contatosHub$qualificado_date)]
+                                                                                                                                                                                                               !is.na(contatosHub$qualificado_date)]
     return(contatosHub)
 }
-
 #retorna lista de contatos do Hubspot a partir de uma ID de lista
 getHubspotContacts <- function(APIKEY, listID="2133"){
     ###############################
@@ -237,7 +300,6 @@ getHubspotContacts <- function(APIKEY, listID="2133"){
 
     return (contactsFunil)
 }
-
 #cria tabela com numeros em cada etapa do funil
 criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
                                 dataRef = NULL, Q = NULL, dataFinal = NULL){
@@ -535,7 +597,6 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
     return (final)
 }
-
 #cria grupos de faturamento
 criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
                                 dataRef = NULL, Q = NULL, dataFinal = NULL){
@@ -910,7 +971,6 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
 
   return (final)
 }
-
 #plota funil
 plotFunilComercial <- function(funil, title = "Funil Comercial",subtitle = "", color = "#0000CC", fill = "steelblue", complete = FALSE){
   if (!complete){
@@ -965,7 +1025,6 @@ plotFunilComercial <- function(funil, title = "Funil Comercial",subtitle = "", c
   }
   grid.arrange(p1, p2, ncol=2, widths=c(4,1), top=tg)
 }
-
 #plota funil
 plotGruposdeFaturamento <- function(grupo_faturamento, title = "Grupos de Faturamento", color = "Blues"){
   levels <- c("NId","F0","F1","F2","F3","F4","F5","F6","F7")
@@ -986,7 +1045,6 @@ plotGruposdeFaturamento <- function(grupo_faturamento, title = "Grupos de Fatura
   grid.arrange(p)
 
 }
-
 #filtra contatos
 filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
                             dataRef = NULL, Q = NULL, dataFinal = NULL){
@@ -1291,7 +1349,6 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
   return (final)
 }
-
 #format contacts csv
 formatContactcsv <- function(contacts) {
   contacts$opp_new_date<-as.Date(contacts$opp_new_date)
@@ -1324,7 +1381,6 @@ formatContactcsv <- function(contacts) {
   contacts$tpv_mes_2<-as.numeric(contacts$tpv_mes_2)
   contacts$tpv_mes_3<-as.numeric(contacts$tpv_mes_3)
 }
-
 #gera resumo de cohort
 cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
   start_time <- Sys.time()
@@ -1334,6 +1390,9 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
     if (is.null(path)) {
       path <- readline(prompt="Enter complete file path: ")
     }
+    if(is.null(dataRaw$owner_name)){
+      dataRaw$owner_name <- NA
+    }
     dataRaw<- read.csv(path,stringsAsFactors = FALSE,encoding = "UTF-8")
 
     dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
@@ -1341,6 +1400,13 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
     names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
                         "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
                         "n_payments")
+  }else if (is.null(dataRaw$owner_name)){
+    dataRaw$owner_name <- NA
+    dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
+
+    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
+                        "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
+                        "n_payments", "owner_name")
   }else {
     dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
 
@@ -1391,8 +1457,8 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
   data <- data[order(data$account_id),]
   grp <- group_by(data,account_id)
   fdTPV <- summarise(grp, first_payment = min(payment_date))
-
-  data <- merge(data,fdTPV,by = "account_id", all = TRUE)
+  ldTPV <- summarise(grp, last_payment = max(payment_date))
+  data <- merge(data,fdTPV,ldTPV, by = "account_id", all = TRUE)
 
   data$m <- ((year(data$payment_date) - year(data$first_payment))*12 + (month(data$payment_date) - month(data$first_payment)))
 
@@ -1492,7 +1558,6 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
 
   return(summary)
 }
-
 #gera resumo de cohort para plot
 churnBase <- function(base , comercial, churn_time = 4, tpv_group = c("F0","F1","F2","F3","F4","F5", "F6", "F7"), type = "all") {
 
@@ -1546,7 +1611,6 @@ churnBase <- function(base , comercial, churn_time = 4, tpv_group = c("F0","F1",
 
   return (final)
 }
-
 #le base do goodata para cohort
 getCohortBase <- function(path = "C:/Users/mauricio.chigutti/Google Drive/Cohort/Churn4.csv"){
   base<- read.csv(path,
@@ -1554,7 +1618,6 @@ getCohortBase <- function(path = "C:/Users/mauricio.chigutti/Google Drive/Cohort
 
   return(base)
 }
-
 #gera lista com churns do MX a partir de uma lista de contatos
 filtraCohort <- function(lista_clientes, churn_time, churn_month) {
 
@@ -1568,5 +1631,74 @@ filtraCohort <- function(lista_clientes, churn_time, churn_month) {
   final <- final[is.na(final[,which(names(final)==paste0("M",churn_month))]),]
 
   return (final)
+}
+#gera tabela de dias médios para cada vendedor
+funilTempoMedio <- function(contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", ecommerce_platform = "all"){
+
+  ## set vectors for all option ##
+  if (vendedor == "all"){
+    vendedor <- unique(contatos$hubspot_owner_name)[!is.na(unique(contatos$hubspot_owner_name))]
+  }
+  if (lead_source_geral == "all"){
+    lead_source_geral <- unique(contatos$lead_source_geral_new)
+  }
+  if (lead_source == "all"){
+    lead_source <- unique(contatos$lead_source_new)
+  }
+  if (ecommerce_platform == "all"){
+    ecommerce_platform <- unique(contatos$ecommerce_platform)
+  }
+
+  unicos <- aggregate(contatos, by=list(contatos$email), FUN = min)
+  unicos$RPC <- as.Date(unicos$prim_contato_date)-as.Date(unicos$reuniao_date)
+  unicos$PCQ <- as.Date(unicos$qualificado_date)-as.Date(unicos$prim_contato_date)
+  unicos$QPE <- as.Date(unicos$prop_enviada_date)-as.Date(unicos$qualificado_date)
+  unicos$PEPA <- as.Date(unicos$prop_aceita_date)-as.Date(unicos$prop_enviada_date)
+  unicos$PAEI <- as.Date(unicos$em_integracao_date)-as.Date(unicos$prop_aceita_date)
+  unicos$EII <- as.Date(unicos$integrado_date)-as.Date(unicos$em_integracao_date)
+  unicos$IC <- as.Date(unicos$convertido_date)-as.Date(unicos$integrado_date)
+  unicos$AteConverter <- as.Date(unicos$convertido_date)-as.Date(unicos$reuniao_date)
+
+  final_unicos <- unicos[unicos$hubspot_owner_name%in% vendedor & unicos$lead_source_geral_new%in%lead_source_geral &
+                    unicos$lead_source_new%in%lead_source & unicos$ecommerce_platform%in%ecommerce_platform,]
+
+  group <- group_by(final_unicos, hubspot_owner_name)
+  sm <- summarise(group, AteConverter = round(mean(AteConverter, na.rm = TRUE), digits=0), RPC = round(mean(RPC, na.rm = TRUE), digits=0),
+                  PCQ = round(mean(PCQ, na.rm = TRUE), digits=0), QPE = round(mean(QPE, na.rm = TRUE), digits=0),
+                  PEPA = round(mean(PEPA, na.rm = TRUE), digits=0), PAEI = round(mean(PAEI, na.rm = TRUE), digits=0),
+                  EII = round(mean(EII, na.rm = TRUE), digits=0), IC = round(mean(IC, na.rm = TRUE), digits=0))
+
+  resumo <- list()
+  for(i in 1:length(vendedor)){
+
+    AteConverter <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$AteConverter),]$AteConverter))
+    AteConverter <- data.frame(mean = round(mean(AteConverter, na.rm = TRUE), digits=1), sd = round(sd(AteConverter, na.rm = TRUE), digits=1), max = round(max(AteConverter, na.rm = TRUE), digits=1), min = round(min(AteConverter, na.rm = TRUE), digits=1), median = round(median(AteConverter, na.rm = TRUE), digits=1))
+
+    RPC <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$RPC),]$RPC))
+    RPC <- data.frame(mean = round(mean(RPC, na.rm = TRUE), digits=1), sd = round(sd(RPC, na.rm = TRUE), digits=1), max = round(max(RPC, na.rm = TRUE), digits=1), min = round(min(RPC, na.rm = TRUE), digits=1), median = round(median(RPC, na.rm = TRUE), digits=1))
+
+    PCQ <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$PCQ),]$PCQ))
+    PCQ <- data.frame(mean = round(mean(PCQ, na.rm = TRUE), digits=1), sd = round(sd(PCQ, na.rm = TRUE), digits=1), max = round(max(PCQ, na.rm = TRUE), digits=1), min = round(min(PCQ, na.rm = TRUE), digits=1), median = round(median(PCQ, na.rm = TRUE), digits=1))
+
+    QPE <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$QPE),]$QPE))
+    QPE <- data.frame(mean = round(mean(QPE, na.rm = TRUE), digits=1), sd = round(sd(QPE, na.rm = TRUE), digits=1), max = round(max(QPE, na.rm = TRUE), digits=1), min = round(min(QPE, na.rm = TRUE), digits=1), median = round(median(QPE, na.rm = TRUE), digits=1))
+
+    PEPA <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$PEPA),]$PEPA))
+    PEPA <- data.frame(mean = round(mean(PEPA, na.rm = TRUE), digits=1), sd = round(sd(PEPA, na.rm = TRUE), digits=1), max = round(max(PEPA, na.rm = TRUE), digits=1), min = round(min(PEPA, na.rm = TRUE), digits=1), median = round(median(PEPA, na.rm = TRUE), digits=1))
+
+    PAEI <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$PAEI),]$PAEI))
+    PAEI <- data.frame(mean = round(mean(PAEI, na.rm = TRUE), digits=1), sd = round(sd(PAEI, na.rm = TRUE), digits=1), max = round(max(PAEI, na.rm = TRUE), digits=1), min = round(min(PAEI, na.rm = TRUE), digits=1), median = round(median(PAEI, na.rm = TRUE), digits=1))
+
+    EII <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$EII),]$EII))
+    EII <- data.frame(mean = round(mean(EII, na.rm = TRUE), digits=1), sd = round(sd(EII, na.rm = TRUE), digits=1), max = round(max(EII, na.rm = TRUE), digits=1), min = round(min(EII, na.rm = TRUE), digits=1), median = round(median(EII, na.rm = TRUE), digits=1))
+
+    IC <- (as.numeric(unicos[unicos$hubspot_owner_name==vendedor[i] & !is.na(unicos$hubspot_owner_name) & !is.na(unicos$IC),]$IC))
+    IC <- data.frame(mean = round(mean(IC, na.rm = TRUE), digits=1), sd = round(sd(IC, na.rm = TRUE), digits=1), max = round(max(IC, na.rm = TRUE), digits=1), min = round(min(IC, na.rm = TRUE), digits=1), median = round(median(IC, na.rm = TRUE), digits=1))
+
+    resumo[[vendedor[i]]] <- rbind(AteConverter,RPC,PCQ,QPE,PEPA,PAEI,EII,IC)
+    rownames(resumo[[vendedor[i]]]) <- c("AteConverter","RPC","PCQ","QPE","PEPA","PAEI","EII","IC")
+  }
+
+  final <- list(table_sm = sm, resumo = resumo)
 }
 
