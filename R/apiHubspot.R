@@ -14,7 +14,7 @@ library(tidyr)
 ##a mais
 library(splitstackshape)
 library(tm)
-library(SnowballCC)
+#library(SnowballCC)
 library(RColorBrewer)
 library(ggplot2)
 library(wordcloud)
@@ -22,6 +22,9 @@ library(biclust)
 library(cluster)
 library(igraph)
 library(fpc)
+library(ggplot2)
+library(scales)
+library(slam)
 
 #recebe lista de contatos do hubspot e retorna tabela com propriedades a partir disto
 toTable <- function(APIKEY,hubscontent){
@@ -1755,9 +1758,11 @@ topWords <- function(texto ,n_words = 1, remove_words = TRUE, remove_punctuation
 
   twogram_freq <- sort(row_sums(tdm), decreasing=TRUE)
   twogram_freq_df <- data.frame(words = names(twogram_freq), word_freq = twogram_freq)
-
+  soma <- sum(twogram_freq_df$word_freq)
+  twogram_freq_df$density <- format(twogram_freq_df$word_freq/soma,digits=2)
   return(twogram_freq_df)
 }
+#plot de word cloud
 plotWcloud <- function(wordsDf, wmax = 50){
   wordcloud((wordsDf$words), wordsDf$word_freq, max.words=wmax, scale=c(5, .1), colors=brewer.pal(6, "Dark2"))
 }
