@@ -11,6 +11,18 @@ library(zoo)
 library(reshape2)
 library(tidyr)
 
+##a mais
+library(splitstackshape)
+library(tm)
+library(SnowballCC)
+library(RColorBrewer)
+library(ggplot2)
+library(wordcloud)
+library(biclust)
+library(cluster)
+library(igraph)
+library(fpc)
+
 #recebe lista de contatos do hubspot e retorna tabela com propriedades a partir disto
 toTable <- function(APIKEY,hubscontent){
     colunas = 43
@@ -324,14 +336,15 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
         if (is.null(dataRef)){
             dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
         }else{
-            dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+            if (is.null(dataFinal)){
+                dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+            }
+            #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
         }
-
-        dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
 
         reuniao <- length(which(!is.na(contatosD$reuniao_date) &
                                     (contatosD$reuniao_date>=dataRef) &
-                                    (contatosD$reuniao_date<dataFinal) &
+                                    (contatosD$reuniao_date<=dataFinal) &
                                     contatosD$hubspot_owner_name%in%vendedor &
                                     contatosD$lead_source_geral_new%in%lead_source_geral &
                                     contatosD$lead_source_new%in%lead_source &
@@ -339,7 +352,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         pcontato <- length(which(!is.na(contatosD$prim_contato_date) &
                                      (contatosD$prim_contato_date>=dataRef) &
-                                     (contatosD$prim_contato_date<dataFinal) &
+                                     (contatosD$prim_contato_date<=dataFinal) &
                                      contatosD$hubspot_owner_name%in%vendedor &
                                      contatosD$lead_source_geral_new%in%lead_source_geral &
                                      contatosD$lead_source_new%in%lead_source &
@@ -347,7 +360,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         qualificado <- length(which(!is.na(contatosD$qualificado_date) &
                                         (contatosD$qualificado_date>=dataRef) &
-                                        (contatosD$qualificado_date<dataFinal) &
+                                        (contatosD$qualificado_date<=dataFinal) &
                                         contatosD$hubspot_owner_name%in%vendedor &
                                         contatosD$lead_source_geral_new%in%lead_source_geral &
                                         contatosD$lead_source_new%in%lead_source &
@@ -355,7 +368,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         penviada <- length(which(!is.na(contatosD$prop_enviada_date) &
                                      (contatosD$prop_enviada_date>=dataRef) &
-                                     (contatosD$prop_enviada_date<dataFinal) &
+                                     (contatosD$prop_enviada_date<=dataFinal) &
                                      contatosD$hubspot_owner_name%in%vendedor &
                                      contatosD$lead_source_geral_new%in%lead_source_geral &
                                      contatosD$lead_source_new%in%lead_source &
@@ -363,7 +376,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         paceita <- length(which(!is.na(contatosD$prop_aceita_date) &
                                     (contatosD$prop_aceita_date>=dataRef) &
-                                    (contatosD$prop_aceita_date<dataFinal) &
+                                    (contatosD$prop_aceita_date<=dataFinal) &
                                     contatosD$hubspot_owner_name%in%vendedor &
                                     contatosD$lead_source_geral_new%in%lead_source_geral &
                                     contatosD$lead_source_new%in%lead_source &
@@ -371,7 +384,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         emintegracao <- length(which(!is.na(contatosD$em_integracao_date) &
                                          (contatosD$em_integracao_date>=dataRef) &
-                                         (contatosD$em_integracao_date<dataFinal) &
+                                         (contatosD$em_integracao_date<=dataFinal) &
                                          contatosD$hubspot_owner_name%in%vendedor &
                                          contatosD$lead_source_geral_new%in%lead_source_geral &
                                          contatosD$lead_source_new%in%lead_source &
@@ -379,7 +392,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         integrado <- length(which(!is.na(contatosD$integrado_date) &
                                       (contatosD$integrado_date>=dataRef) &
-                                      (contatosD$integrado_date<dataFinal) &
+                                      (contatosD$integrado_date<=dataFinal) &
                                       contatosD$hubspot_owner_name%in%vendedor &
                                       contatosD$lead_source_geral_new%in%lead_source_geral &
                                       contatosD$lead_source_new%in%lead_source &
@@ -387,7 +400,7 @@ criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = 
 
         convertido <- length(which(!is.na(contatosD$convertido_date) &
                                        (contatosD$convertido_date>=dataRef) &
-                                       (contatosD$convertido_date<dataFinal) &
+                                       (contatosD$convertido_date<=dataFinal) &
                                        contatosD$hubspot_owner_name%in%vendedor &
                                        contatosD$lead_source_geral_new%in%lead_source_geral &
                                        contatosD$lead_source_new%in%lead_source &
@@ -621,14 +634,15 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
     if (is.null(dataRef)){
       dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
     }else{
-      dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+        if (is.null(dataFinal)){
+            dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+        }
+        #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
     }
-
-    dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
 
     F0 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -638,7 +652,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F1 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -648,7 +662,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F2 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -658,7 +672,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F3 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -668,7 +682,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F4 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -678,7 +692,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F5 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -688,7 +702,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F6 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -698,7 +712,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     F7 <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -708,7 +722,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatos$deal_stage=="Convertido"))
     ND <- length(which(!is.na(contatosD$convertido_date) &
                          (contatosD$convertido_date>=dataRef) &
-                         (contatosD$convertido_date<dataFinal) &
+                         (contatosD$convertido_date<=dataFinal) &
                          contatosD$hubspot_owner_name%in%vendedor &
                          contatosD$lead_source_geral_new%in%lead_source_geral &
                          contatosD$lead_source_new%in%lead_source &
@@ -1069,14 +1083,15 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
     if (is.null(dataRef)){
       dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
     }else{
-      dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+        if (is.null(dataFinal)){
+            dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+        }
+        #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
     }
-
-    dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
 
     reuniao <- contatosD[(!is.na(contatosD$reuniao_date) &
                               (contatosD$reuniao_date>=dataRef) &
-                              (contatosD$reuniao_date<dataFinal) &
+                              (contatosD$reuniao_date<=dataFinal) &
                               contatosD$hubspot_owner_name%in%vendedor &
                               contatosD$lead_source_geral_new%in%lead_source_geral &
                               contatosD$lead_source_new%in%lead_source &
@@ -1084,7 +1099,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     pcontato <- contatosD[(!is.na(contatosD$prim_contato_date) &
                                (contatosD$prim_contato_date>=dataRef) &
-                               (contatosD$prim_contato_date<dataFinal) &
+                               (contatosD$prim_contato_date<=dataFinal) &
                                contatosD$hubspot_owner_name%in%vendedor &
                                contatosD$lead_source_geral_new%in%lead_source_geral &
                                contatosD$lead_source_new%in%lead_source &
@@ -1092,7 +1107,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     qualificado <- contatosD[(!is.na(contatosD$qualificado_date) &
                                   (contatosD$qualificado_date>=dataRef) &
-                                  (contatosD$qualificado_date<dataFinal) &
+                                  (contatosD$qualificado_date<=dataFinal) &
                                   contatosD$hubspot_owner_name%in%vendedor &
                                   contatosD$lead_source_geral_new%in%lead_source_geral &
                                   contatosD$lead_source_new%in%lead_source &
@@ -1100,7 +1115,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     penviada <- contatosD[(!is.na(contatosD$prop_enviada_date) &
                                (contatosD$prop_enviada_date>=dataRef) &
-                               (contatosD$prop_enviada_date<dataFinal) &
+                               (contatosD$prop_enviada_date<=dataFinal) &
                                contatosD$hubspot_owner_name%in%vendedor &
                                contatosD$lead_source_geral_new%in%lead_source_geral &
                                contatosD$lead_source_new%in%lead_source &
@@ -1108,7 +1123,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     paceita <- contatosD[(!is.na(contatosD$prop_aceita_date) &
                               (contatosD$prop_aceita_date>=dataRef) &
-                              (contatosD$prop_aceita_date<dataFinal) &
+                              (contatosD$prop_aceita_date<=dataFinal) &
                               contatosD$hubspot_owner_name%in%vendedor &
                               contatosD$lead_source_geral_new%in%lead_source_geral &
                               contatosD$lead_source_new%in%lead_source &
@@ -1116,7 +1131,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     emintegracao <- contatosD[(!is.na(contatosD$em_integracao_date) &
                                    (contatosD$em_integracao_date>=dataRef) &
-                                   (contatosD$em_integracao_date<dataFinal) &
+                                   (contatosD$em_integracao_date<=dataFinal) &
                                    contatosD$hubspot_owner_name%in%vendedor &
                                    contatosD$lead_source_geral_new%in%lead_source_geral &
                                    contatosD$lead_source_new%in%lead_source &
@@ -1124,7 +1139,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     integrado <- contatosD[(!is.na(contatosD$integrado_date) &
                                 (contatosD$integrado_date>=dataRef) &
-                                (contatosD$integrado_date<dataFinal) &
+                                (contatosD$integrado_date<=dataFinal) &
                                 contatosD$hubspot_owner_name%in%vendedor &
                                 contatosD$lead_source_geral_new%in%lead_source_geral &
                                 contatosD$lead_source_new%in%lead_source &
@@ -1132,7 +1147,7 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
 
     convertido <- contatosD[(!is.na(contatosD$convertido_date) &
                                  (contatosD$convertido_date>=dataRef) &
-                                 (contatosD$convertido_date<dataFinal) &
+                                 (contatosD$convertido_date<=dataFinal) &
                                  contatosD$hubspot_owner_name%in%vendedor &
                                  contatosD$lead_source_geral_new%in%lead_source_geral &
                                  contatosD$lead_source_new%in%lead_source &
@@ -1711,4 +1726,38 @@ funilTempoMedio <- function(contatos, vendedor = "all", lead_source_geral = "all
 
   final <- list(table_sm = sm, resumo = resumo)
 }
+#cria word cloud a partir de texto
+topWords <- function(texto ,n_words = 1, remove_words = TRUE, remove_punctuation = TRUE,
+                     to_lower = TRUE, strip_space = TRUE){
+  docs <- VCorpus(VectorSource(texto))
+  #processing
+  if(remove_punctuation){
+    docs <- tm_map(docs,removePunctuation)
+  }
+  if(to_lower){
+    docs <- tm_map(docs, tolower)
+  }
+  if(remove_words){
+    docs <- tm_map(docs, removeWords, stopwords("portuguese"))
+  }
+  if(strip_space){
+    docs <- tm_map(docs, stripWhitespace)
+  }
 
+  docs <- tm_map(docs, PlainTextDocument)
+
+  BigramTokenizer <- function(x){
+    unlist(lapply(ngrams(words(x), n_words), paste, collapse = " "), use.names = FALSE)
+  }
+
+
+  tdm <- TermDocumentMatrix(docs, control = list(tokenize = BigramTokenizer))
+
+  twogram_freq <- sort(row_sums(tdm), decreasing=TRUE)
+  twogram_freq_df <- data.frame(words = names(twogram_freq), word_freq = twogram_freq)
+
+  return(twogram_freq_df)
+}
+plotWcloud <- function(wordsDf, wmax = 50){
+  wordcloud((wordsDf$words), wordsDf$word_freq, max.words=wmax, scale=c(5, .1), colors=brewer.pal(6, "Dark2"))
+}
