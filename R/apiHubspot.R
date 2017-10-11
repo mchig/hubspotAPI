@@ -28,593 +28,295 @@ library(slam)
 
 #recebe lista de contatos do hubspot e retorna tabela com propriedades a partir disto
 toTable <- function(APIKEY,hubscontent){
-    colunas = 43
-    final<- data.frame(matrix(ncol=colunas))
-    names(final)<-c("email","account_id","lead_source_geral_new","lead_source_new","hubspot_owner_id","opp_new_date","lifecyclestage","deal_stage","became_customer_new"
-                    ,"lost_reason","tpv_novo_comercial","condition","faturamento_grupo","reuniao_date","prim_contato_date","qualificado_date","prop_enviada_date"
-                    ,"prop_aceita_date","em_integracao_date","integrado_date","convertido_date","nao_e_pra_agora_date","perdido_date","hs_lifecyclestage_lead_date"
-                    ,"hs_lifecyclestage_marketingqualifiedlead_date","ecommerce_platform","hubspotscore","receita_ano","receita_mes","receita_total","total_tpv"
-                    ,"tpv_ano","tpv_anteontem","tpv_ontem","tpv_max","tpv_mes","tpv_mes_1","tpv_mes_2","tpv_mes_3","monthly_revenue","resposta_inicial","lastmodifieddate","createdate")
-    for(i in 1:length(hubscontent)){
-        final[i,]<-NA
-        final[i,1] <- ifelse(is.null(hubscontent[[i]]$properties$email$value),NA,hubscontent[[i]]$properties$email$value)
-        final[i,2] <- ifelse(is.null(hubscontent[[i]]$properties$account_id$value),NA,as.numeric(hubscontent[[i]]$properties$account_id$value))
-        final[i,3] <- ifelse(is.null(hubscontent[[i]]$properties$lead_source_geral_new$value),NA,hubscontent[[i]]$properties$lead_source_geral_new$value)
-        final[i,4] <- ifelse(is.null(hubscontent[[i]]$properties$lead_source_new$value),NA,hubscontent[[i]]$properties$lead_source_new$value)
-        final[i,5] <- ifelse(is.null(hubscontent[[i]]$properties$hubspot_owner_id$value),NA,hubscontent[[i]]$properties$hubspot_owner_id$value)
-        final[i,6] <- ifelse(is.null(hubscontent[[i]]$properties$opp_new_date$value),NA,hubscontent[[i]]$properties$opp_new_date$value)
-        final[i,7] <- ifelse(is.null(hubscontent[[i]]$properties$lifecyclestage$value),NA,hubscontent[[i]]$properties$lifecyclestage$value)
-        final[i,8] <- ifelse(is.null(hubscontent[[i]]$properties$deal_stage$value),NA,hubscontent[[i]]$properties$deal_stage$value)
-        final[i,9] <- ifelse(is.null(hubscontent[[i]]$properties$became_customer_new$value),NA,hubscontent[[i]]$properties$became_customer_new$value)
-        final[i,10] <- ifelse(is.null(hubscontent[[i]]$properties$lost_reason$value),NA,hubscontent[[i]]$properties$lost_reason$value)
-        final[i,11] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_novo_comercial$value),NA,hubscontent[[i]]$properties$tpv_novo_comercial$value)
-        final[i,12] <- ifelse(is.null(hubscontent[[i]]$properties$condition$value),NA,hubscontent[[i]]$properties$condition$value)
-        final[i,13] <- ifelse(is.null(hubscontent[[i]]$properties$faturamento_grupo$value),NA,hubscontent[[i]]$properties$faturamento_grupo$value)
-        final[i,14] <- ifelse(is.null(hubscontent[[i]]$properties$reuniao_date$value),NA,hubscontent[[i]]$properties$reuniao_date$value)
-        final[i,15] <- ifelse(is.null(hubscontent[[i]]$properties$prim_contato_date$value),NA,hubscontent[[i]]$properties$prim_contato_date$value)
-        final[i,16] <- ifelse(is.null(hubscontent[[i]]$properties$qualificado_date$value),NA,hubscontent[[i]]$properties$qualificado_date$value)
-        final[i,17] <- ifelse(is.null(hubscontent[[i]]$properties$prop_enviada_date$value),NA,hubscontent[[i]]$properties$prop_enviada_date$value)
-        final[i,18] <- ifelse(is.null(hubscontent[[i]]$properties$prop_aceita_date$value),NA,hubscontent[[i]]$properties$prop_aceita_date$value)
-        final[i,19] <- ifelse(is.null(hubscontent[[i]]$properties$em_integracao_date$value),NA,hubscontent[[i]]$properties$em_integracao_date$value)
-        final[i,20] <- ifelse(is.null(hubscontent[[i]]$properties$integrado_date$value),NA,hubscontent[[i]]$properties$integrado_date$value)
-        final[i,21] <- ifelse(is.null(hubscontent[[i]]$properties$convertido_date$value),NA,hubscontent[[i]]$properties$convertido_date$value)
-        final[i,22] <- ifelse(is.null(hubscontent[[i]]$properties$nao_e_pra_agora_date$value),NA,hubscontent[[i]]$properties$nao_e_pra_agora_date$value)
-        final[i,23] <- ifelse(is.null(hubscontent[[i]]$properties$perdido_date$value),NA,hubscontent[[i]]$properties$perdido_date$value)
-        final[i,24] <- ifelse(is.null(hubscontent[[i]]$properties$hs_lifecyclestage_lead_date$value),NA,hubscontent[[i]]$properties$hs_lifecyclestage_lead_date$value)
-        final[i,25] <- ifelse(is.null(hubscontent[[i]]$properties$hs_lifecyclestage_marketingqualifiedlead_date$value),NA,hubscontent[[i]]$properties$hs_lifecyclestage_marketingqualifiedlead_date$value)
-        final[i,26] <- ifelse(is.null(hubscontent[[i]]$properties$ecommerce_platform$value),NA,hubscontent[[i]]$properties$ecommerce_platform$value)
-        final[i,27] <- ifelse(is.null(hubscontent[[i]]$properties$hubspotscore$value),NA,as.numeric(hubscontent[[i]]$properties$hubspotscore$value))
-        final[i,28] <- ifelse(is.null(hubscontent[[i]]$properties$receita_ano$value),NA,as.numeric(hubscontent[[i]]$properties$receita_ano$value))
-        final[i,29] <- ifelse(is.null(hubscontent[[i]]$properties$receita_mes$value),NA,as.numeric(hubscontent[[i]]$properties$receita_mes$value))
-        final[i,30] <- ifelse(is.null(hubscontent[[i]]$properties$receita_total$value),NA,as.numeric(hubscontent[[i]]$properties$receita_total$value))
-        final[i,31] <- ifelse(is.null(hubscontent[[i]]$properties$total_tpv$value),NA,as.numeric(hubscontent[[i]]$properties$total_tpv$value))
-        final[i,32] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_ano$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_ano$value))
-        final[i,33] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_anteontem$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_anteontem$value))
-        final[i,34] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_ontem$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_ontem$value))
-        final[i,35] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_max$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_max$value))
-        final[i,36] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes$value))
-        final[i,37] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_1$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_1$value))
-        final[i,38] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_2$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_2$value))
-        final[i,39] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_3$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_3$value))
-        final[i,40] <- ifelse(is.null(hubscontent[[i]]$properties$monthly_revenue$value),NA,hubscontent[[i]]$properties$monthly_revenue$value)
-        final[i,41] <- ifelse(is.null(hubscontent[[i]]$properties$resposta_inicial$value),NA,hubscontent[[i]]$properties$resposta_inicial$value)
-        final[i,42] <- ifelse(is.null(hubscontent[[i]]$properties$lastmodifieddate$value),NA,hubscontent[[i]]$properties$lastmodifieddate$value)
-        final[i,43] <- ifelse(is.null(hubscontent[[i]]$properties$createdate$value),NA,hubscontent[[i]]$properties$createdate$value)
-    }
-    #add owners name and email
-    owners <- getOwners(APIKEY)
-    final <- merge(final, owners, by = "hubspot_owner_id", all.x = TRUE)
+  colunas = 43
+  final<- data.frame(matrix(ncol=colunas))
+  names(final)<-c("email","account_id","lead_source_geral_new","lead_source_new","hubspot_owner_id","opp_new_date","lifecyclestage","deal_stage","became_customer_new"
+                  ,"lost_reason","tpv_novo_comercial","condition","faturamento_grupo","reuniao_date","prim_contato_date","qualificado_date","prop_enviada_date"
+                  ,"prop_aceita_date","em_integracao_date","integrado_date","convertido_date","nao_e_pra_agora_date","perdido_date","hs_lifecyclestage_lead_date"
+                  ,"hs_lifecyclestage_marketingqualifiedlead_date","ecommerce_platform","hubspotscore","receita_ano","receita_mes","receita_total","total_tpv"
+                  ,"tpv_ano","tpv_anteontem","tpv_ontem","tpv_max","tpv_mes","tpv_mes_1","tpv_mes_2","tpv_mes_3","monthly_revenue","resposta_inicial","lastmodifieddate","createdate")
+  for(i in 1:length(hubscontent)){
+    final[i,]<-NA
+    final[i,1] <- ifelse(is.null(hubscontent[[i]]$properties$email$value),NA,hubscontent[[i]]$properties$email$value)
+    final[i,2] <- ifelse(is.null(hubscontent[[i]]$properties$account_id$value),NA,as.numeric(hubscontent[[i]]$properties$account_id$value))
+    final[i,3] <- ifelse(is.null(hubscontent[[i]]$properties$lead_source_geral_new$value),NA,hubscontent[[i]]$properties$lead_source_geral_new$value)
+    final[i,4] <- ifelse(is.null(hubscontent[[i]]$properties$lead_source_new$value),NA,hubscontent[[i]]$properties$lead_source_new$value)
+    final[i,5] <- ifelse(is.null(hubscontent[[i]]$properties$hubspot_owner_id$value),NA,hubscontent[[i]]$properties$hubspot_owner_id$value)
+    final[i,6] <- ifelse(is.null(hubscontent[[i]]$properties$opp_new_date$value),NA,hubscontent[[i]]$properties$opp_new_date$value)
+    final[i,7] <- ifelse(is.null(hubscontent[[i]]$properties$lifecyclestage$value),NA,hubscontent[[i]]$properties$lifecyclestage$value)
+    final[i,8] <- ifelse(is.null(hubscontent[[i]]$properties$deal_stage$value),NA,hubscontent[[i]]$properties$deal_stage$value)
+    final[i,9] <- ifelse(is.null(hubscontent[[i]]$properties$became_customer_new$value),NA,hubscontent[[i]]$properties$became_customer_new$value)
+    final[i,10] <- ifelse(is.null(hubscontent[[i]]$properties$lost_reason$value),NA,hubscontent[[i]]$properties$lost_reason$value)
+    final[i,11] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_novo_comercial$value),NA,hubscontent[[i]]$properties$tpv_novo_comercial$value)
+    final[i,12] <- ifelse(is.null(hubscontent[[i]]$properties$condition$value),NA,hubscontent[[i]]$properties$condition$value)
+    final[i,13] <- ifelse(is.null(hubscontent[[i]]$properties$faturamento_grupo$value),NA,hubscontent[[i]]$properties$faturamento_grupo$value)
+    final[i,14] <- ifelse(is.null(hubscontent[[i]]$properties$reuniao_date$value),NA,hubscontent[[i]]$properties$reuniao_date$value)
+    final[i,15] <- ifelse(is.null(hubscontent[[i]]$properties$prim_contato_date$value),NA,hubscontent[[i]]$properties$prim_contato_date$value)
+    final[i,16] <- ifelse(is.null(hubscontent[[i]]$properties$qualificado_date$value),NA,hubscontent[[i]]$properties$qualificado_date$value)
+    final[i,17] <- ifelse(is.null(hubscontent[[i]]$properties$prop_enviada_date$value),NA,hubscontent[[i]]$properties$prop_enviada_date$value)
+    final[i,18] <- ifelse(is.null(hubscontent[[i]]$properties$prop_aceita_date$value),NA,hubscontent[[i]]$properties$prop_aceita_date$value)
+    final[i,19] <- ifelse(is.null(hubscontent[[i]]$properties$em_integracao_date$value),NA,hubscontent[[i]]$properties$em_integracao_date$value)
+    final[i,20] <- ifelse(is.null(hubscontent[[i]]$properties$integrado_date$value),NA,hubscontent[[i]]$properties$integrado_date$value)
+    final[i,21] <- ifelse(is.null(hubscontent[[i]]$properties$convertido_date$value),NA,hubscontent[[i]]$properties$convertido_date$value)
+    final[i,22] <- ifelse(is.null(hubscontent[[i]]$properties$nao_e_pra_agora_date$value),NA,hubscontent[[i]]$properties$nao_e_pra_agora_date$value)
+    final[i,23] <- ifelse(is.null(hubscontent[[i]]$properties$perdido_date$value),NA,hubscontent[[i]]$properties$perdido_date$value)
+    final[i,24] <- ifelse(is.null(hubscontent[[i]]$properties$hs_lifecyclestage_lead_date$value),NA,hubscontent[[i]]$properties$hs_lifecyclestage_lead_date$value)
+    final[i,25] <- ifelse(is.null(hubscontent[[i]]$properties$hs_lifecyclestage_marketingqualifiedlead_date$value),NA,hubscontent[[i]]$properties$hs_lifecyclestage_marketingqualifiedlead_date$value)
+    final[i,26] <- ifelse(is.null(hubscontent[[i]]$properties$ecommerce_platform$value),NA,hubscontent[[i]]$properties$ecommerce_platform$value)
+    final[i,27] <- ifelse(is.null(hubscontent[[i]]$properties$hubspotscore$value),NA,as.numeric(hubscontent[[i]]$properties$hubspotscore$value))
+    final[i,28] <- ifelse(is.null(hubscontent[[i]]$properties$receita_ano$value),NA,as.numeric(hubscontent[[i]]$properties$receita_ano$value))
+    final[i,29] <- ifelse(is.null(hubscontent[[i]]$properties$receita_mes$value),NA,as.numeric(hubscontent[[i]]$properties$receita_mes$value))
+    final[i,30] <- ifelse(is.null(hubscontent[[i]]$properties$receita_total$value),NA,as.numeric(hubscontent[[i]]$properties$receita_total$value))
+    final[i,31] <- ifelse(is.null(hubscontent[[i]]$properties$total_tpv$value),NA,as.numeric(hubscontent[[i]]$properties$total_tpv$value))
+    final[i,32] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_ano$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_ano$value))
+    final[i,33] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_anteontem$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_anteontem$value))
+    final[i,34] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_ontem$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_ontem$value))
+    final[i,35] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_max$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_max$value))
+    final[i,36] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes$value))
+    final[i,37] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_1$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_1$value))
+    final[i,38] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_2$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_2$value))
+    final[i,39] <- ifelse(is.null(hubscontent[[i]]$properties$tpv_mes_3$value),NA,as.numeric(hubscontent[[i]]$properties$tpv_mes_3$value))
+    final[i,40] <- ifelse(is.null(hubscontent[[i]]$properties$monthly_revenue$value),NA,hubscontent[[i]]$properties$monthly_revenue$value)
+    final[i,41] <- ifelse(is.null(hubscontent[[i]]$properties$resposta_inicial$value),NA,hubscontent[[i]]$properties$resposta_inicial$value)
+    final[i,42] <- ifelse(is.null(hubscontent[[i]]$properties$lastmodifieddate$value),NA,hubscontent[[i]]$properties$lastmodifieddate$value)
+    final[i,43] <- ifelse(is.null(hubscontent[[i]]$properties$createdate$value),NA,hubscontent[[i]]$properties$createdate$value)
+  }
+  #add owners name and email
+  owners <- getOwners(APIKEY)
+  final <- merge(final, owners, by = "hubspot_owner_id", all.x = TRUE)
 
-    #arrange the dates
-    final$opp_new_date<-as.Date(as.POSIXlt(as.numeric(final$opp_new_date)/1000, origin="1970-01-01"))
-    final$became_customer_new<-as.Date(as.POSIXlt(as.numeric(final$became_customer_new)/1000, origin="1970-01-01"))
-    final$reuniao_date<-as.Date(as.POSIXlt(as.numeric(final$reuniao_date)/1000, origin="1970-01-01"))
-    final$prim_contato_date<-as.Date(as.POSIXlt(as.numeric(final$prim_contato_date)/1000, origin="1970-01-01"))
-    final$qualificado_date<-as.Date(as.POSIXlt(as.numeric(final$qualificado_date)/1000, origin="1970-01-01"))
-    final$prop_enviada_date<-as.Date(as.POSIXlt(as.numeric(final$prop_enviada_date)/1000, origin="1970-01-01"))
-    final$prop_aceita_date<-as.Date(as.POSIXlt(as.numeric(final$prop_aceita_date)/1000, origin="1970-01-01"))
-    final$em_integracao_date<-as.Date(as.POSIXlt(as.numeric(final$em_integracao_date)/1000, origin="1970-01-01"))
-    final$integrado_date<-as.Date(as.POSIXlt(as.numeric(final$integrado_date)/1000, origin="1970-01-01"))
-    final$convertido_date<-as.Date(as.POSIXlt(as.numeric(final$convertido_date)/1000, origin="1970-01-01"))
-    final$nao_e_pra_agora_date<-as.Date(as.POSIXlt(as.numeric(final$nao_e_pra_agora_date)/1000, origin="1970-01-01"))
-    final$perdido_date<-as.Date(as.POSIXlt(as.numeric(final$perdido_date)/1000, origin="1970-01-01"))
-    final$hs_lifecyclestage_lead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_lead_date)/1000, origin="1970-01-01"))
-    final$hs_lifecyclestage_marketingqualifiedlead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_marketingqualifiedlead_date)/1000, origin="1970-01-01"))
-    final$lastmodifieddate<-as.Date(as.POSIXlt(as.numeric(final$lastmodifieddate)/1000, origin="1970-01-01"))
-    final$createdate<-as.Date(as.POSIXlt(as.numeric(final$createdate)/1000, origin="1970-01-01"))
+  #arrange the dates
+  final$opp_new_date<-as.Date(as.POSIXlt(as.numeric(final$opp_new_date)/1000, origin="1970-01-01"))
+  final$became_customer_new<-as.Date(as.POSIXlt(as.numeric(final$became_customer_new)/1000, origin="1970-01-01"))
+  final$reuniao_date<-as.Date(as.POSIXlt(as.numeric(final$reuniao_date)/1000, origin="1970-01-01"))
+  final$prim_contato_date<-as.Date(as.POSIXlt(as.numeric(final$prim_contato_date)/1000, origin="1970-01-01"))
+  final$qualificado_date<-as.Date(as.POSIXlt(as.numeric(final$qualificado_date)/1000, origin="1970-01-01"))
+  final$prop_enviada_date<-as.Date(as.POSIXlt(as.numeric(final$prop_enviada_date)/1000, origin="1970-01-01"))
+  final$prop_aceita_date<-as.Date(as.POSIXlt(as.numeric(final$prop_aceita_date)/1000, origin="1970-01-01"))
+  final$em_integracao_date<-as.Date(as.POSIXlt(as.numeric(final$em_integracao_date)/1000, origin="1970-01-01"))
+  final$integrado_date<-as.Date(as.POSIXlt(as.numeric(final$integrado_date)/1000, origin="1970-01-01"))
+  final$convertido_date<-as.Date(as.POSIXlt(as.numeric(final$convertido_date)/1000, origin="1970-01-01"))
+  final$nao_e_pra_agora_date<-as.Date(as.POSIXlt(as.numeric(final$nao_e_pra_agora_date)/1000, origin="1970-01-01"))
+  final$perdido_date<-as.Date(as.POSIXlt(as.numeric(final$perdido_date)/1000, origin="1970-01-01"))
+  final$hs_lifecyclestage_lead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_lead_date)/1000, origin="1970-01-01"))
+  final$hs_lifecyclestage_marketingqualifiedlead_date<-as.Date(as.POSIXlt(as.numeric(final$hs_lifecyclestage_marketingqualifiedlead_date)/1000, origin="1970-01-01"))
+  final$lastmodifieddate<-as.Date(as.POSIXlt(as.numeric(final$lastmodifieddate)/1000, origin="1970-01-01"))
+  final$createdate<-as.Date(as.POSIXlt(as.numeric(final$createdate)/1000, origin="1970-01-01"))
 
-    return(final)
+  return(final)
 }
 #retorna tabela de IDs do hubspot com seus respectivos owners e emails
 getOwners <- function(APIKEY){
-    APIKEY_VALUE <- APIKEY
-    HS_API_URL <- "http://api.hubapi.com"
-    APIKEY <- paste("?hapikey=", APIKEY_VALUE,sep="")
-    xulr <-"/owners/v2/owners/"
+  APIKEY_VALUE <- APIKEY
+  HS_API_URL <- "http://api.hubapi.com"
+  APIKEY <- paste("?hapikey=", APIKEY_VALUE,sep="")
+  xulr <-"/owners/v2/owners/"
 
-    url <- paste(HS_API_URL, xulr, APIKEY,sep="")
+  url <- paste(HS_API_URL, xulr, APIKEY,sep="")
 
-    #raw.result <- GET(url = url)
-    #this.raw.content <- rawToChar(raw.result$content)
-    this.raw.content <- content(GET(url = url), "text")
-    this.content <- fromJSON(this.raw.content)
+  #raw.result <- GET(url = url)
+  #this.raw.content <- rawToChar(raw.result$content)
+  this.raw.content <- content(GET(url = url), "text")
+  this.content <- fromJSON(this.raw.content)
 
-    hubspot_owner_id<-this.content$ownerId
-    hubspot_owner_name<-paste(this.content$firstName,this.content$lastName)
-    hubspot_owner_email<-this.content$email
-    owners<-data.frame(hubspot_owner_id,hubspot_owner_name,hubspot_owner_email)
-    return(owners)
+  hubspot_owner_id<-this.content$ownerId
+  hubspot_owner_name<-paste(this.content$firstName,this.content$lastName)
+  hubspot_owner_email<-this.content$email
+  owners<-data.frame(hubspot_owner_id,hubspot_owner_name,hubspot_owner_email)
+  return(owners)
 }
 #arruma data de contatos
 arrangeDate <- function(contatosHub){
 
-    #garantir que tds contatos com data tenham opp data
-    min <- as.Date(apply(contatosHub[,c(which(names(contatosHub)=="prim_contato_date"),which(names(contatosHub)=="qualificado_date"),which(names(contatosHub)=="prop_enviada_date"),
-                                        which(names(contatosHub)=="prop_aceita_date"),which(names(contatosHub)=="em_integracao_date"),which(names(contatosHub)=="integrado_date"),
-                                        which(names(contatosHub)=="convertido_date"),
-                                        which(names(contatosHub)=="nao_e_pra_agora_date"),
-                                        which(names(contatosHub)=="perdido_date"))], 1, min,na.rm = TRUE))
-    contatosHub$opp_new_date[is.na(contatosHub$reuniao_date)  & is.na(contatosHub$opp_new_date) & !is.na(min)] <- min [is.na(contatosHub$reuniao_date)
-                                                                                                                       & is.na(contatosHub$opp_new_date) & !is.na(min)]
+  #garantir que tds contatos com data tenham opp data
+  min <- as.Date(apply(contatosHub[,c(which(names(contatosHub)=="prim_contato_date"),which(names(contatosHub)=="qualificado_date"),which(names(contatosHub)=="prop_enviada_date"),
+                                      which(names(contatosHub)=="prop_aceita_date"),which(names(contatosHub)=="em_integracao_date"),which(names(contatosHub)=="integrado_date"),
+                                      which(names(contatosHub)=="convertido_date"),
+                                      which(names(contatosHub)=="nao_e_pra_agora_date"),
+                                      which(names(contatosHub)=="perdido_date"))], 1, min,na.rm = TRUE))
+  contatosHub$opp_new_date[is.na(contatosHub$reuniao_date)  & is.na(contatosHub$opp_new_date) & !is.na(min)] <- min [is.na(contatosHub$reuniao_date)
+                                                                                                                     & is.na(contatosHub$opp_new_date) & !is.na(min)]
 
-    #garantir que reuniao seja maior entre reuniao e opp
-    contatosHub$reuniao_date <- as.Date(apply(contatosHub[,c(which(names(contatosHub)=="opp_new_date"),which(names(contatosHub)=="reuniao_date"))],
-                                              1, max,na.rm = TRUE))
+  #garantir que reuniao seja maior entre reuniao e opp
+  contatosHub$reuniao_date <- as.Date(apply(contatosHub[,c(which(names(contatosHub)=="opp_new_date"),which(names(contatosHub)=="reuniao_date"))],
+                                            1, max,na.rm = TRUE))
 
-    #colocar NA em contatos com #convertido# date menor que reuniao
-    contatosHub$convertido_date[!is.na(contatosHub$reuniao_date) &
-                                    !is.na(contatosHub$convertido_date) &
-                                    contatosHub$reuniao_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$prim_contato_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$prim_contato_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$qualificado_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$qualificado_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$prop_enviada_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$prop_enviada_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$prop_aceita_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$prop_aceita_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$em_integracao_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$em_integracao_date>contatosHub$convertido_date] <- NA
-    contatosHub$convertido_date[!is.na(contatosHub$integrado_date) &
-                                  !is.na(contatosHub$convertido_date) &
-                                  contatosHub$integrado_date>contatosHub$convertido_date] <- NA
+  #colocar NA em contatos com #convertido# date menor que reuniao
+  contatosHub$convertido_date[!is.na(contatosHub$reuniao_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$reuniao_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$prim_contato_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$prim_contato_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$qualificado_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$qualificado_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$prop_enviada_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$prop_enviada_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$prop_aceita_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$prop_aceita_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$em_integracao_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$em_integracao_date>contatosHub$convertido_date] <- NA
+  contatosHub$convertido_date[!is.na(contatosHub$integrado_date) &
+                                !is.na(contatosHub$convertido_date) &
+                                contatosHub$integrado_date>contatosHub$convertido_date] <- NA
 
 
-    #colocar NA em contatos com #integrado# date menor que reuniao e colocar a data de convertido em integrado com NA mas com convertido date
-    contatosHub$integrado_date[!is.na(contatosHub$reuniao_date) &
-                                   !is.na(contatosHub$integrado_date) &
-                                   contatosHub$reuniao_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[!is.na(contatosHub$prim_contato_date) &
-                                 !is.na(contatosHub$integrado_date) &
-                                 contatosHub$prim_contato_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[!is.na(contatosHub$qualificado_date) &
-                                 !is.na(contatosHub$integrado_date) &
-                                 contatosHub$qualificado_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[!is.na(contatosHub$prop_enviada_date) &
-                                 !is.na(contatosHub$integrado_date) &
-                                 contatosHub$prop_enviada_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[!is.na(contatosHub$prop_aceita_date) &
-                                 !is.na(contatosHub$integrado_date) &
-                                 contatosHub$prop_aceita_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[!is.na(contatosHub$em_integracao_date) &
-                                 !is.na(contatosHub$integrado_date) &
-                                 contatosHub$em_integracao_date>contatosHub$integrado_date] <- NA
-    contatosHub$integrado_date[is.na(contatosHub$integrado_date) &
-                                   !is.na(contatosHub$convertido_date)] <- contatosHub$convertido_date[is.na(contatosHub$integrado_date) &
-                                                                                                           !is.na(contatosHub$convertido_date)]
-    #repetir para em integracao
-    contatosHub$em_integracao_date[!is.na(contatosHub$reuniao_date) &
-                                       !is.na(contatosHub$em_integracao_date) &
-                                       contatosHub$reuniao_date>contatosHub$em_integracao_date] <- NA
-    contatosHub$em_integracao_date[!is.na(contatosHub$prim_contato_date) &
-                                     !is.na(contatosHub$em_integracao_date) &
-                                     contatosHub$prim_contato_date>contatosHub$em_integracao_date] <- NA
-    contatosHub$em_integracao_date[!is.na(contatosHub$qualificado_date) &
-                                     !is.na(contatosHub$em_integracao_date) &
-                                     contatosHub$qualificado_date>contatosHub$em_integracao_date] <- NA
-    contatosHub$em_integracao_date[!is.na(contatosHub$prop_enviada_date) &
-                                     !is.na(contatosHub$em_integracao_date) &
-                                     contatosHub$prop_enviada_date>contatosHub$em_integracao_date] <- NA
-    contatosHub$em_integracao_date[!is.na(contatosHub$prop_aceita_date) &
-                                     !is.na(contatosHub$em_integracao_date) &
-                                     contatosHub$prop_aceita_date>contatosHub$em_integracao_date] <- NA
-    contatosHub$em_integracao_date[is.na(contatosHub$em_integracao_date) &
-                                       !is.na(contatosHub$integrado_date)] <- contatosHub$integrado_date[is.na(contatosHub$em_integracao_date) &
-                                                                                                             !is.na(contatosHub$integrado_date)]
-    #repetir para em prop aceita
-    contatosHub$prop_aceita_date[!is.na(contatosHub$reuniao_date) &
-                                     !is.na(contatosHub$prop_aceita_date) &
-                                     contatosHub$reuniao_date>contatosHub$prop_aceita_date] <- NA
-    contatosHub$prop_aceita_date[!is.na(contatosHub$prim_contato_date) &
-                                   !is.na(contatosHub$prop_aceita_date) &
-                                   contatosHub$prim_contato_date>contatosHub$prop_aceita_date] <- NA
-    contatosHub$prop_aceita_date[!is.na(contatosHub$qualificado_date) &
-                                   !is.na(contatosHub$prop_aceita_date) &
-                                   contatosHub$qualificado_date>contatosHub$prop_aceita_date] <- NA
-    contatosHub$prop_aceita_date[!is.na(contatosHub$prop_enviada_date) &
-                                   !is.na(contatosHub$prop_aceita_date) &
-                                   contatosHub$prop_enviada_date>contatosHub$prop_aceita_date] <- NA
-    contatosHub$prop_aceita_date[is.na(contatosHub$prop_aceita_date) &
-                                     !is.na(contatosHub$em_integracao_date)] <- contatosHub$em_integracao_date[is.na(contatosHub$prop_aceita_date) &
-                                                                                                                   !is.na(contatosHub$em_integracao_date)]
+  #colocar NA em contatos com #integrado# date menor que reuniao e colocar a data de convertido em integrado com NA mas com convertido date
+  contatosHub$integrado_date[!is.na(contatosHub$reuniao_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$reuniao_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[!is.na(contatosHub$prim_contato_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$prim_contato_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[!is.na(contatosHub$qualificado_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$qualificado_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[!is.na(contatosHub$prop_enviada_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$prop_enviada_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[!is.na(contatosHub$prop_aceita_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$prop_aceita_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[!is.na(contatosHub$em_integracao_date) &
+                               !is.na(contatosHub$integrado_date) &
+                               contatosHub$em_integracao_date>contatosHub$integrado_date] <- NA
+  contatosHub$integrado_date[is.na(contatosHub$integrado_date) &
+                               !is.na(contatosHub$convertido_date)] <- contatosHub$convertido_date[is.na(contatosHub$integrado_date) &
+                                                                                                     !is.na(contatosHub$convertido_date)]
+  #repetir para em integracao
+  contatosHub$em_integracao_date[!is.na(contatosHub$reuniao_date) &
+                                   !is.na(contatosHub$em_integracao_date) &
+                                   contatosHub$reuniao_date>contatosHub$em_integracao_date] <- NA
+  contatosHub$em_integracao_date[!is.na(contatosHub$prim_contato_date) &
+                                   !is.na(contatosHub$em_integracao_date) &
+                                   contatosHub$prim_contato_date>contatosHub$em_integracao_date] <- NA
+  contatosHub$em_integracao_date[!is.na(contatosHub$qualificado_date) &
+                                   !is.na(contatosHub$em_integracao_date) &
+                                   contatosHub$qualificado_date>contatosHub$em_integracao_date] <- NA
+  contatosHub$em_integracao_date[!is.na(contatosHub$prop_enviada_date) &
+                                   !is.na(contatosHub$em_integracao_date) &
+                                   contatosHub$prop_enviada_date>contatosHub$em_integracao_date] <- NA
+  contatosHub$em_integracao_date[!is.na(contatosHub$prop_aceita_date) &
+                                   !is.na(contatosHub$em_integracao_date) &
+                                   contatosHub$prop_aceita_date>contatosHub$em_integracao_date] <- NA
+  contatosHub$em_integracao_date[is.na(contatosHub$em_integracao_date) &
+                                   !is.na(contatosHub$integrado_date)] <- contatosHub$integrado_date[is.na(contatosHub$em_integracao_date) &
+                                                                                                       !is.na(contatosHub$integrado_date)]
+  #repetir para em prop aceita
+  contatosHub$prop_aceita_date[!is.na(contatosHub$reuniao_date) &
+                                 !is.na(contatosHub$prop_aceita_date) &
+                                 contatosHub$reuniao_date>contatosHub$prop_aceita_date] <- NA
+  contatosHub$prop_aceita_date[!is.na(contatosHub$prim_contato_date) &
+                                 !is.na(contatosHub$prop_aceita_date) &
+                                 contatosHub$prim_contato_date>contatosHub$prop_aceita_date] <- NA
+  contatosHub$prop_aceita_date[!is.na(contatosHub$qualificado_date) &
+                                 !is.na(contatosHub$prop_aceita_date) &
+                                 contatosHub$qualificado_date>contatosHub$prop_aceita_date] <- NA
+  contatosHub$prop_aceita_date[!is.na(contatosHub$prop_enviada_date) &
+                                 !is.na(contatosHub$prop_aceita_date) &
+                                 contatosHub$prop_enviada_date>contatosHub$prop_aceita_date] <- NA
+  contatosHub$prop_aceita_date[is.na(contatosHub$prop_aceita_date) &
+                                 !is.na(contatosHub$em_integracao_date)] <- contatosHub$em_integracao_date[is.na(contatosHub$prop_aceita_date) &
+                                                                                                             !is.na(contatosHub$em_integracao_date)]
 
-    #repetir para em prop enviada
-    contatosHub$prop_enviada_date[!is.na(contatosHub$reuniao_date) &
-                                      !is.na(contatosHub$prop_enviada_date) &
-                                      contatosHub$reuniao_date>contatosHub$prop_enviada_date] <- NA
-    contatosHub$prop_enviada_date[!is.na(contatosHub$prim_contato_date) &
-                                    !is.na(contatosHub$prop_enviada_date) &
-                                    contatosHub$prim_contato_date>contatosHub$prop_enviada_date] <- NA
-    contatosHub$prop_enviada_date[!is.na(contatosHub$qualificado_date) &
-                                    !is.na(contatosHub$prop_enviada_date) &
-                                    contatosHub$qualificado_date>contatosHub$prop_enviada_date] <- NA
+  #repetir para em prop enviada
+  contatosHub$prop_enviada_date[!is.na(contatosHub$reuniao_date) &
+                                  !is.na(contatosHub$prop_enviada_date) &
+                                  contatosHub$reuniao_date>contatosHub$prop_enviada_date] <- NA
+  contatosHub$prop_enviada_date[!is.na(contatosHub$prim_contato_date) &
+                                  !is.na(contatosHub$prop_enviada_date) &
+                                  contatosHub$prim_contato_date>contatosHub$prop_enviada_date] <- NA
+  contatosHub$prop_enviada_date[!is.na(contatosHub$qualificado_date) &
+                                  !is.na(contatosHub$prop_enviada_date) &
+                                  contatosHub$qualificado_date>contatosHub$prop_enviada_date] <- NA
 
-    contatosHub$prop_enviada_date[is.na(contatosHub$prop_enviada_date) &
-                                      !is.na(contatosHub$prop_aceita_date)] <- contatosHub$prop_aceita_date[is.na(contatosHub$prop_enviada_date) &
-                                                                                                                !is.na(contatosHub$prop_aceita_date)]
-    #repetir para qualificado
-    contatosHub$qualificado_date[!is.na(contatosHub$reuniao_date) &
-                                     !is.na(contatosHub$qualificado_date) &
-                                     contatosHub$reuniao_date>contatosHub$qualificado_date] <- NA
-    contatosHub$qualificado_date[!is.na(contatosHub$prim_contato_date) &
-                                   !is.na(contatosHub$qualificado_date) &
-                                   contatosHub$prim_contato_date>contatosHub$qualificado_date] <- NA
+  contatosHub$prop_enviada_date[is.na(contatosHub$prop_enviada_date) &
+                                  !is.na(contatosHub$prop_aceita_date)] <- contatosHub$prop_aceita_date[is.na(contatosHub$prop_enviada_date) &
+                                                                                                          !is.na(contatosHub$prop_aceita_date)]
+  #repetir para qualificado
+  contatosHub$qualificado_date[!is.na(contatosHub$reuniao_date) &
+                                 !is.na(contatosHub$qualificado_date) &
+                                 contatosHub$reuniao_date>contatosHub$qualificado_date] <- NA
+  contatosHub$qualificado_date[!is.na(contatosHub$prim_contato_date) &
+                                 !is.na(contatosHub$qualificado_date) &
+                                 contatosHub$prim_contato_date>contatosHub$qualificado_date] <- NA
 
-    contatosHub$qualificado_date[is.na(contatosHub$qualificado_date) &
-                                     !is.na(contatosHub$prop_enviada_date)] <- contatosHub$prop_enviada_date[is.na(contatosHub$qualificado_date) &
-                                                                                                                 !is.na(contatosHub$prop_enviada_date)]
+  contatosHub$qualificado_date[is.na(contatosHub$qualificado_date) &
+                                 !is.na(contatosHub$prop_enviada_date)] <- contatosHub$prop_enviada_date[is.na(contatosHub$qualificado_date) &
+                                                                                                           !is.na(contatosHub$prop_enviada_date)]
 
-    #repetir para prim contato
-    contatosHub$prim_contato_date[!is.na(contatosHub$reuniao_date) &
-                                      !is.na(contatosHub$prim_contato_date) &
-                                      contatosHub$reuniao_date>contatosHub$prim_contato_date] <- NA
-    contatosHub$prim_contato_date[is.na(contatosHub$prim_contato_date) &
-                                      !is.na(contatosHub$qualificado_date)] <- contatosHub$qualificado_date[is.na(contatosHub$prim_contato_date) &
-                                                                                                                                                                                                               !is.na(contatosHub$qualificado_date)]
-    return(contatosHub)
+  #repetir para prim contato
+  contatosHub$prim_contato_date[!is.na(contatosHub$reuniao_date) &
+                                  !is.na(contatosHub$prim_contato_date) &
+                                  contatosHub$reuniao_date>contatosHub$prim_contato_date] <- NA
+  contatosHub$prim_contato_date[is.na(contatosHub$prim_contato_date) &
+                                  !is.na(contatosHub$qualificado_date)] <- contatosHub$qualificado_date[is.na(contatosHub$prim_contato_date) &
+                                                                                                          !is.na(contatosHub$qualificado_date)]
+  return(contatosHub)
 }
 #retorna lista de contatos do Hubspot a partir de uma ID de lista
 getHubspotContacts <- function(APIKEY, listID="2133"){
-    ###############################
-    ###############################
-    #API key
-    APIKEY_VALUE <- APIKEY
-    HS_API_URL <- "http://api.hubapi.com"
+  ###############################
+  ###############################
+  #API key
+  APIKEY_VALUE <- APIKEY
+  HS_API_URL <- "http://api.hubapi.com"
 
-    ###############################
-    ###############################
-    #get all vIDs from list id
+  ###############################
+  ###############################
+  #get all vIDs from list id
 
 
-    has.more=TRUE
-    NMAX = 400
-    n=1
-    vidOffset=0
-    vids<-list()
-    contactslist<-list()
+  has.more=TRUE
+  NMAX = 400
+  n=1
+  vidOffset=0
+  vids<-list()
+  contactslist<-list()
 
-    while(has.more==TRUE & n<=NMAX){
+  while(has.more==TRUE & n<=NMAX){
 
-        #pega vIDs
-        APIKEY <- paste("?hapikey=", APIKEY_VALUE,"&count=250&vidOffset=",vidOffset,sep="")
-        xulr <- paste("/contacts/v1/lists/",listID,"/contacts/all",sep="")
+    #pega vIDs
+    APIKEY <- paste("?hapikey=", APIKEY_VALUE,"&count=250&vidOffset=",vidOffset,sep="")
+    xulr <- paste("/contacts/v1/lists/",listID,"/contacts/all",sep="")
 
-        url <- paste(HS_API_URL, xulr, APIKEY,sep="")
+    url <- paste(HS_API_URL, xulr, APIKEY,sep="")
 
-        this.raw.content <- content(GET(url = url), "text")
-        this.content <- fromJSON(this.raw.content)
+    this.raw.content <- content(GET(url = url), "text")
+    this.content <- fromJSON(this.raw.content)
 
-        vidOffset<-this.content$`vid-offset`
-        has.more<- this.content$`has-more`
+    vidOffset<-this.content$`vid-offset`
+    has.more<- this.content$`has-more`
 
-        vids[[n]]<-this.content$contacts$vid
-        vec<-unlist(vids[[n]])
+    vids[[n]]<-this.content$contacts$vid
+    vec<-unlist(vids[[n]])
 
-        #pega Contatos
-        vidsV<-paste("vid=",vec,sep="",collapse = "&")
-        xulr <-"/contacts/v1/contact/vids/batch/?"
+    #pega Contatos
+    vidsV<-paste("vid=",vec,sep="",collapse = "&")
+    xulr <-"/contacts/v1/contact/vids/batch/?"
 
-        APIKEY <- paste("&hapikey=", APIKEY_VALUE,sep="")
+    APIKEY <- paste("&hapikey=", APIKEY_VALUE,sep="")
 
-        url <- paste(HS_API_URL, xulr, vidsV, APIKEY,sep="")
+    url <- paste(HS_API_URL, xulr, vidsV, APIKEY,sep="")
 
-        this.raw.content <- content(GET(url = url), "text")
-        this.content <- fromJSON(this.raw.content)
+    this.raw.content <- content(GET(url = url), "text")
+    this.content <- fromJSON(this.raw.content)
 
-        contactslist[[n]]<-toTable(APIKEY = APIKEY_VALUE, hubscontent = this.content)
+    contactslist[[n]]<-toTable(APIKEY = APIKEY_VALUE, hubscontent = this.content)
 
-        n<-n+1
-    }
+    n<-n+1
+  }
 
-    contactsFunil <- ldply(contactslist, data.frame)
+  contactsFunil <- ldply(contactslist, data.frame)
 
-    return (contactsFunil)
+  return (contactsFunil)
 }
 #cria tabela com numeros em cada etapa do funil
 criaFunilComercial <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
-                                dataRef = NULL, Q = NULL, dataFinal = NULL){
-    ## set vectors for all option ##
-    if (vendedor == "all"){
-        vendedor <- unique(contatos$hubspot_owner_name)
-    }
-    if (lead_source_geral == "all"){
-        lead_source_geral <- unique(contatos$lead_source_geral_new)
-    }
-    if (lead_source == "all"){
-        lead_source <- unique(contatos$lead_source_new)
-    }
-    if (ecommerce_platform == "all"){
-        ecommerce_platform <- unique(contatos$ecommerce_platform)
-    }
-    #arrange contacts dates
-    #contatosD <- suppressWarnings(arrangeDate (contatos))
-    contatosD <- contatos
-    ## visao do mes ##
-    if (type == "mes"){
-        if (is.null(dataRef)){
-            dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
-        }else{
-            if (is.null(dataFinal)){
-                dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
-            }
-            #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
-        }
-
-        reuniao <- length(which(!is.na(contatosD$reuniao_date) &
-                                    (contatosD$reuniao_date>=dataRef) &
-                                    (contatosD$reuniao_date<=dataFinal) &
-                                    contatosD$hubspot_owner_name%in%vendedor &
-                                    contatosD$lead_source_geral_new%in%lead_source_geral &
-                                    contatosD$lead_source_new%in%lead_source &
-                                    contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        pcontato <- length(which(!is.na(contatosD$prim_contato_date) &
-                                     (contatosD$prim_contato_date>=dataRef) &
-                                     (contatosD$prim_contato_date<=dataFinal) &
-                                     contatosD$hubspot_owner_name%in%vendedor &
-                                     contatosD$lead_source_geral_new%in%lead_source_geral &
-                                     contatosD$lead_source_new%in%lead_source &
-                                     contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        qualificado <- length(which(!is.na(contatosD$qualificado_date) &
-                                        (contatosD$qualificado_date>=dataRef) &
-                                        (contatosD$qualificado_date<=dataFinal) &
-                                        contatosD$hubspot_owner_name%in%vendedor &
-                                        contatosD$lead_source_geral_new%in%lead_source_geral &
-                                        contatosD$lead_source_new%in%lead_source &
-                                        contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        penviada <- length(which(!is.na(contatosD$prop_enviada_date) &
-                                     (contatosD$prop_enviada_date>=dataRef) &
-                                     (contatosD$prop_enviada_date<=dataFinal) &
-                                     contatosD$hubspot_owner_name%in%vendedor &
-                                     contatosD$lead_source_geral_new%in%lead_source_geral &
-                                     contatosD$lead_source_new%in%lead_source &
-                                     contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        paceita <- length(which(!is.na(contatosD$prop_aceita_date) &
-                                    (contatosD$prop_aceita_date>=dataRef) &
-                                    (contatosD$prop_aceita_date<=dataFinal) &
-                                    contatosD$hubspot_owner_name%in%vendedor &
-                                    contatosD$lead_source_geral_new%in%lead_source_geral &
-                                    contatosD$lead_source_new%in%lead_source &
-                                    contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        emintegracao <- length(which(!is.na(contatosD$em_integracao_date) &
-                                         (contatosD$em_integracao_date>=dataRef) &
-                                         (contatosD$em_integracao_date<=dataFinal) &
-                                         contatosD$hubspot_owner_name%in%vendedor &
-                                         contatosD$lead_source_geral_new%in%lead_source_geral &
-                                         contatosD$lead_source_new%in%lead_source &
-                                         contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        integrado <- length(which(!is.na(contatosD$integrado_date) &
-                                      (contatosD$integrado_date>=dataRef) &
-                                      (contatosD$integrado_date<=dataFinal) &
-                                      contatosD$hubspot_owner_name%in%vendedor &
-                                      contatosD$lead_source_geral_new%in%lead_source_geral &
-                                      contatosD$lead_source_new%in%lead_source &
-                                      contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        convertido <- length(which(!is.na(contatosD$convertido_date) &
-                                       (contatosD$convertido_date>=dataRef) &
-                                       (contatosD$convertido_date<=dataFinal) &
-                                       contatosD$hubspot_owner_name%in%vendedor &
-                                       contatosD$lead_source_geral_new%in%lead_source_geral &
-                                       contatosD$lead_source_new%in%lead_source &
-                                       contatosD$ecommerce_platform%in%ecommerce_platform &
-                                       contatos$deal_stage=="Convertido"))
-    }
-    ## visao de trimestral ##
-    else if (type == "tri"){
-
-        if (is.null(dataRef)){
-            if (is.null(Q)){
-                Q <- quarter(now())
-            }
-            if (Q == 1){
-                dataRef <- as.Date(paste(year(now()),"-01-01",sep=""))
-            }else if (Q == 2){
-                dataRef <- as.Date(paste(year(now()),"-04-01",sep=""))
-            }else if (Q == 3){
-                dataRef <- as.Date(paste(year(now()),"-07-01",sep=""))
-            }else {
-                dataRef <- as.Date(paste(year(now()),"-10-01",sep=""))
-            }
-        }
-        else if (!is.null(dataRef)){
-            if (is.null(Q)){
-               Q <- quarter(dataRef)
-            }
-            if (Q == 1){
-                dataRef <- as.Date(paste(year(dataRef),"-01-01",sep=""))
-            }else if (Q == 2){
-                dataRef <- as.Date(paste(year(dataRef),"-04-01",sep=""))
-            }else if (Q == 3){
-                dataRef <- as.Date(paste(year(dataRef),"-07-01",sep=""))
-            }else {
-                dataRef <- as.Date(paste(year(dataRef),"-10-01",sep=""))
-            }
-        }
-
-        dataFinal <- dataRef
-        month(dataFinal) <- month(dataRef) + 2
-        day(dataFinal) <- days_in_month(dataFinal)
-
-        reuniao <- length(which(!is.na(contatosD$reuniao_date) &
-                                    (contatosD$reuniao_date>=dataRef) &
-                                    (contatosD$reuniao_date<=dataFinal) &
-                                    contatosD$hubspot_owner_name%in%vendedor &
-                                    contatosD$lead_source_geral_new%in%lead_source_geral &
-                                    contatosD$lead_source_new%in%lead_source &
-                                    contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        pcontato <- length(which(!is.na(contatosD$prim_contato_date) &
-                                     (contatosD$prim_contato_date>=dataRef) &
-                                     (contatosD$prim_contato_date<=dataFinal) &
-                                     contatosD$hubspot_owner_name%in%vendedor &
-                                     contatosD$lead_source_geral_new%in%lead_source_geral &
-                                     contatosD$lead_source_new%in%lead_source &
-                                     contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        qualificado <- length(which(!is.na(contatosD$qualificado_date) &
-                                        (contatosD$qualificado_date>=dataRef) &
-                                        (contatosD$qualificado_date<=dataFinal) &
-                                        contatosD$hubspot_owner_name%in%vendedor &
-                                        contatosD$lead_source_geral_new%in%lead_source_geral &
-                                        contatosD$lead_source_new%in%lead_source &
-                                        contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        penviada <- length(which(!is.na(contatosD$prop_enviada_date) &
-                                     (contatosD$prop_enviada_date>=dataRef) &
-                                     (contatosD$prop_enviada_date<=dataFinal) &
-                                     contatosD$hubspot_owner_name%in%vendedor &
-                                     contatosD$lead_source_geral_new%in%lead_source_geral &
-                                     contatosD$lead_source_new%in%lead_source &
-                                     contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        paceita <- length(which(!is.na(contatosD$prop_aceita_date) &
-                                    (contatosD$prop_aceita_date>=dataRef) &
-                                    (contatosD$prop_aceita_date<=dataFinal) &
-                                    contatosD$hubspot_owner_name%in%vendedor &
-                                    contatosD$lead_source_geral_new%in%lead_source_geral &
-                                    contatosD$lead_source_new%in%lead_source &
-                                    contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        emintegracao <- length(which(!is.na(contatosD$em_integracao_date) &
-                                         (contatosD$em_integracao_date>=dataRef) &
-                                         (contatosD$em_integracao_date<=dataFinal) &
-                                         contatosD$hubspot_owner_name%in%vendedor &
-                                         contatosD$lead_source_geral_new%in%lead_source_geral &
-                                         contatosD$lead_source_new%in%lead_source &
-                                         contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        integrado <- length(which(!is.na(contatosD$integrado_date) &
-                                      (contatosD$integrado_date>=dataRef) &
-                                      (contatosD$integrado_date<=dataFinal) &
-                                      contatosD$hubspot_owner_name%in%vendedor &
-                                      contatosD$lead_source_geral_new%in%lead_source_geral &
-                                      contatosD$lead_source_new%in%lead_source &
-                                      contatosD$ecommerce_platform%in%ecommerce_platform))
-
-        convertido <- length(which(!is.na(contatosD$convertido_date) &
-                                       (contatosD$convertido_date>=dataRef) &
-                                       (contatosD$convertido_date<=dataFinal) &
-                                       contatosD$hubspot_owner_name%in%vendedor &
-                                       contatosD$lead_source_geral_new%in%lead_source_geral &
-                                       contatosD$lead_source_new%in%lead_source &
-                                       contatosD$ecommerce_platform%in%ecommerce_platform &
-                                       contatos$deal_stage=="Convertido"))
-
-    }
-    ## visao de safra ##
-    else {
-        if (is.null(dataRef)){
-            dataRef <- as.Date(paste(year(now()),"-01-01",sep=""))
-        }
-        if (is.null(dataFinal)){
-          dataFinal <- as.Date(paste(year(dataRef),"-12-31",sep=""))
-        }
-
-      reuniao <- length(which(!is.na(contatosD$reuniao_date) &
-                                contatosD$reuniao_date>=dataRef &
-                                contatosD$reuniao_date<=dataFinal &
-                                contatosD$hubspot_owner_name%in%vendedor &
-                                contatosD$lead_source_geral_new%in%lead_source_geral &
-                                contatosD$lead_source_new%in%lead_source &
-                                contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      pcontato <- length(which(!is.na(contatosD$reuniao_date) &
-                                 contatosD$reuniao_date>=dataRef &
-                                 contatosD$reuniao_date<=dataFinal &
-                                 !is.na(contatosD$prim_contato_date) &
-                                 contatosD$prim_contato_date>=dataRef &
-                                 contatosD$prim_contato_date<=dataFinal &
-                                 contatosD$hubspot_owner_name%in%vendedor &
-                                 contatosD$lead_source_geral_new%in%lead_source_geral &
-                                 contatosD$lead_source_new%in%lead_source &
-                                 contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      qualificado <- length(which(!is.na(contatosD$reuniao_date) &
-                                    contatosD$reuniao_date>=dataRef &
-                                    contatosD$reuniao_date<=dataFinal &
-                                    !is.na(contatosD$qualificado_date) &
-                                    contatosD$qualificado_date>=dataRef &
-                                    contatosD$qualificado_date<=dataFinal &
-                                    contatosD$hubspot_owner_name%in%vendedor &
-                                    contatosD$lead_source_geral_new%in%lead_source_geral &
-                                    contatosD$lead_source_new%in%lead_source &
-                                    contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      penviada <- length(which(!is.na(contatosD$reuniao_date) &
-                                 contatosD$reuniao_date>=dataRef &
-                                 contatosD$reuniao_date<=dataFinal &
-                                 !is.na(contatosD$prop_enviada_date) &
-                                 contatosD$prop_enviada_date>=dataRef &
-                                 contatosD$prop_enviada_date<=dataFinal &
-                                 contatosD$hubspot_owner_name%in%vendedor &
-                                 contatosD$lead_source_geral_new%in%lead_source_geral &
-                                 contatosD$lead_source_new%in%lead_source &
-                                 contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      paceita <- length(which(!is.na(contatosD$reuniao_date) &
-                                contatosD$reuniao_date>=dataRef &
-                                contatosD$reuniao_date<=dataFinal &
-                                !is.na(contatosD$prop_aceita_date) &
-                                contatosD$prop_aceita_date>=dataRef &
-                                contatosD$prop_aceita_date<=dataFinal &
-                                contatosD$hubspot_owner_name%in%vendedor &
-                                contatosD$lead_source_geral_new%in%lead_source_geral &
-                                contatosD$lead_source_new%in%lead_source &
-                                contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      emintegracao <- length(which(!is.na(contatosD$reuniao_date) &
-                                     contatosD$reuniao_date>=dataRef &
-                                     contatosD$reuniao_date<=dataFinal &
-                                     !is.na(contatosD$em_integracao_date) &
-                                     contatosD$em_integracao_date>=dataRef &
-                                     contatosD$em_integracao_date<=dataFinal &
-                                     contatosD$hubspot_owner_name%in%vendedor &
-                                     contatosD$lead_source_geral_new%in%lead_source_geral &
-                                     contatosD$lead_source_new%in%lead_source &
-                                     contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      integrado <- length(which(!is.na(contatosD$reuniao_date) &
-                                  contatosD$reuniao_date>=dataRef &
-                                  contatosD$reuniao_date<=dataFinal &
-                                  !is.na(contatosD$integrado_date) &
-                                  contatosD$integrado_date>=dataRef &
-                                  contatosD$integrado_date<=dataFinal &
-                                  contatosD$hubspot_owner_name%in%vendedor &
-                                  contatosD$lead_source_geral_new%in%lead_source_geral &
-                                  contatosD$lead_source_new%in%lead_source &
-                                  contatosD$ecommerce_platform%in%ecommerce_platform))
-
-      convertido <- length(which(!is.na(contatosD$reuniao_date) &
-                                   contatosD$reuniao_date>=dataRef &
-                                   contatosD$reuniao_date<=dataFinal &
-                                   !is.na(contatosD$convertido_date) &
-                                   contatosD$convertido_date>=dataRef &
-                                   contatosD$convertido_date<=dataFinal &
-                                   contatosD$hubspot_owner_name%in%vendedor &
-                                   contatosD$lead_source_geral_new%in%lead_source_geral &
-                                   contatosD$lead_source_new%in%lead_source &
-                                   contatosD$ecommerce_platform%in%ecommerce_platform &
-                                   contatos$deal_stage=="Convertido"))
-    }
-
-    final <- data.frame(deal_stage = c("Reuniao","Primeiro Contato","Qualificado","Proposta Enviada","Proposta Aceita","Em Integracao","Integrado","Convertido"),
-                        ncontacts = c(reuniao,pcontato,qualificado,penviada,paceita,emintegracao,integrado,convertido))
-
-    return (final)
-}
-#cria grupos de faturamento
-criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
                                 dataRef = NULL, Q = NULL, dataFinal = NULL){
   ## set vectors for all option ##
   if (vendedor == "all"){
@@ -637,10 +339,308 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
     if (is.null(dataRef)){
       dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
     }else{
-        if (is.null(dataFinal)){
-            dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
-        }
-        #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+      if (is.null(dataFinal)){
+        dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+      }
+      #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+    }
+
+    reuniao <- length(which(!is.na(contatosD$reuniao_date) &
+                              (contatosD$reuniao_date>=dataRef) &
+                              (contatosD$reuniao_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    pcontato <- length(which(!is.na(contatosD$prim_contato_date) &
+                               (contatosD$prim_contato_date>=dataRef) &
+                               (contatosD$prim_contato_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    qualificado <- length(which(!is.na(contatosD$qualificado_date) &
+                                  (contatosD$qualificado_date>=dataRef) &
+                                  (contatosD$qualificado_date<=dataFinal) &
+                                  contatosD$hubspot_owner_name%in%vendedor &
+                                  contatosD$lead_source_geral_new%in%lead_source_geral &
+                                  contatosD$lead_source_new%in%lead_source &
+                                  contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    penviada <- length(which(!is.na(contatosD$prop_enviada_date) &
+                               (contatosD$prop_enviada_date>=dataRef) &
+                               (contatosD$prop_enviada_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    paceita <- length(which(!is.na(contatosD$prop_aceita_date) &
+                              (contatosD$prop_aceita_date>=dataRef) &
+                              (contatosD$prop_aceita_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    emintegracao <- length(which(!is.na(contatosD$em_integracao_date) &
+                                   (contatosD$em_integracao_date>=dataRef) &
+                                   (contatosD$em_integracao_date<=dataFinal) &
+                                   contatosD$hubspot_owner_name%in%vendedor &
+                                   contatosD$lead_source_geral_new%in%lead_source_geral &
+                                   contatosD$lead_source_new%in%lead_source &
+                                   contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    integrado <- length(which(!is.na(contatosD$integrado_date) &
+                                (contatosD$integrado_date>=dataRef) &
+                                (contatosD$integrado_date<=dataFinal) &
+                                contatosD$hubspot_owner_name%in%vendedor &
+                                contatosD$lead_source_geral_new%in%lead_source_geral &
+                                contatosD$lead_source_new%in%lead_source &
+                                contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    convertido <- length(which(!is.na(contatosD$convertido_date) &
+                                 (contatosD$convertido_date>=dataRef) &
+                                 (contatosD$convertido_date<=dataFinal) &
+                                 contatosD$hubspot_owner_name%in%vendedor &
+                                 contatosD$lead_source_geral_new%in%lead_source_geral &
+                                 contatosD$lead_source_new%in%lead_source &
+                                 contatosD$ecommerce_platform%in%ecommerce_platform &
+                                 contatos$deal_stage=="Convertido"))
+  }
+  ## visao de trimestral ##
+  else if (type == "tri"){
+
+    if (is.null(dataRef)){
+      if (is.null(Q)){
+        Q <- quarter(now())
+      }
+      if (Q == 1){
+        dataRef <- as.Date(paste(year(now()),"-01-01",sep=""))
+      }else if (Q == 2){
+        dataRef <- as.Date(paste(year(now()),"-04-01",sep=""))
+      }else if (Q == 3){
+        dataRef <- as.Date(paste(year(now()),"-07-01",sep=""))
+      }else {
+        dataRef <- as.Date(paste(year(now()),"-10-01",sep=""))
+      }
+    }
+    else if (!is.null(dataRef)){
+      if (is.null(Q)){
+        Q <- quarter(dataRef)
+      }
+      if (Q == 1){
+        dataRef <- as.Date(paste(year(dataRef),"-01-01",sep=""))
+      }else if (Q == 2){
+        dataRef <- as.Date(paste(year(dataRef),"-04-01",sep=""))
+      }else if (Q == 3){
+        dataRef <- as.Date(paste(year(dataRef),"-07-01",sep=""))
+      }else {
+        dataRef <- as.Date(paste(year(dataRef),"-10-01",sep=""))
+      }
+    }
+
+    dataFinal <- dataRef
+    month(dataFinal) <- month(dataRef) + 2
+    day(dataFinal) <- days_in_month(dataFinal)
+
+    reuniao <- length(which(!is.na(contatosD$reuniao_date) &
+                              (contatosD$reuniao_date>=dataRef) &
+                              (contatosD$reuniao_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    pcontato <- length(which(!is.na(contatosD$prim_contato_date) &
+                               (contatosD$prim_contato_date>=dataRef) &
+                               (contatosD$prim_contato_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    qualificado <- length(which(!is.na(contatosD$qualificado_date) &
+                                  (contatosD$qualificado_date>=dataRef) &
+                                  (contatosD$qualificado_date<=dataFinal) &
+                                  contatosD$hubspot_owner_name%in%vendedor &
+                                  contatosD$lead_source_geral_new%in%lead_source_geral &
+                                  contatosD$lead_source_new%in%lead_source &
+                                  contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    penviada <- length(which(!is.na(contatosD$prop_enviada_date) &
+                               (contatosD$prop_enviada_date>=dataRef) &
+                               (contatosD$prop_enviada_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    paceita <- length(which(!is.na(contatosD$prop_aceita_date) &
+                              (contatosD$prop_aceita_date>=dataRef) &
+                              (contatosD$prop_aceita_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    emintegracao <- length(which(!is.na(contatosD$em_integracao_date) &
+                                   (contatosD$em_integracao_date>=dataRef) &
+                                   (contatosD$em_integracao_date<=dataFinal) &
+                                   contatosD$hubspot_owner_name%in%vendedor &
+                                   contatosD$lead_source_geral_new%in%lead_source_geral &
+                                   contatosD$lead_source_new%in%lead_source &
+                                   contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    integrado <- length(which(!is.na(contatosD$integrado_date) &
+                                (contatosD$integrado_date>=dataRef) &
+                                (contatosD$integrado_date<=dataFinal) &
+                                contatosD$hubspot_owner_name%in%vendedor &
+                                contatosD$lead_source_geral_new%in%lead_source_geral &
+                                contatosD$lead_source_new%in%lead_source &
+                                contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    convertido <- length(which(!is.na(contatosD$convertido_date) &
+                                 (contatosD$convertido_date>=dataRef) &
+                                 (contatosD$convertido_date<=dataFinal) &
+                                 contatosD$hubspot_owner_name%in%vendedor &
+                                 contatosD$lead_source_geral_new%in%lead_source_geral &
+                                 contatosD$lead_source_new%in%lead_source &
+                                 contatosD$ecommerce_platform%in%ecommerce_platform &
+                                 contatos$deal_stage=="Convertido"))
+
+  }
+  ## visao de safra ##
+  else {
+    if (is.null(dataRef)){
+      dataRef <- as.Date(paste(year(now()),"-01-01",sep=""))
+    }
+    if (is.null(dataFinal)){
+      dataFinal <- as.Date(paste(year(dataRef),"-12-31",sep=""))
+    }
+
+    reuniao <- length(which(!is.na(contatosD$reuniao_date) &
+                              contatosD$reuniao_date>=dataRef &
+                              contatosD$reuniao_date<=dataFinal &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    pcontato <- length(which(!is.na(contatosD$reuniao_date) &
+                               contatosD$reuniao_date>=dataRef &
+                               contatosD$reuniao_date<=dataFinal &
+                               !is.na(contatosD$prim_contato_date) &
+                               contatosD$prim_contato_date>=dataRef &
+                               contatosD$prim_contato_date<=dataFinal &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    qualificado <- length(which(!is.na(contatosD$reuniao_date) &
+                                  contatosD$reuniao_date>=dataRef &
+                                  contatosD$reuniao_date<=dataFinal &
+                                  !is.na(contatosD$qualificado_date) &
+                                  contatosD$qualificado_date>=dataRef &
+                                  contatosD$qualificado_date<=dataFinal &
+                                  contatosD$hubspot_owner_name%in%vendedor &
+                                  contatosD$lead_source_geral_new%in%lead_source_geral &
+                                  contatosD$lead_source_new%in%lead_source &
+                                  contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    penviada <- length(which(!is.na(contatosD$reuniao_date) &
+                               contatosD$reuniao_date>=dataRef &
+                               contatosD$reuniao_date<=dataFinal &
+                               !is.na(contatosD$prop_enviada_date) &
+                               contatosD$prop_enviada_date>=dataRef &
+                               contatosD$prop_enviada_date<=dataFinal &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    paceita <- length(which(!is.na(contatosD$reuniao_date) &
+                              contatosD$reuniao_date>=dataRef &
+                              contatosD$reuniao_date<=dataFinal &
+                              !is.na(contatosD$prop_aceita_date) &
+                              contatosD$prop_aceita_date>=dataRef &
+                              contatosD$prop_aceita_date<=dataFinal &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    emintegracao <- length(which(!is.na(contatosD$reuniao_date) &
+                                   contatosD$reuniao_date>=dataRef &
+                                   contatosD$reuniao_date<=dataFinal &
+                                   !is.na(contatosD$em_integracao_date) &
+                                   contatosD$em_integracao_date>=dataRef &
+                                   contatosD$em_integracao_date<=dataFinal &
+                                   contatosD$hubspot_owner_name%in%vendedor &
+                                   contatosD$lead_source_geral_new%in%lead_source_geral &
+                                   contatosD$lead_source_new%in%lead_source &
+                                   contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    integrado <- length(which(!is.na(contatosD$reuniao_date) &
+                                contatosD$reuniao_date>=dataRef &
+                                contatosD$reuniao_date<=dataFinal &
+                                !is.na(contatosD$integrado_date) &
+                                contatosD$integrado_date>=dataRef &
+                                contatosD$integrado_date<=dataFinal &
+                                contatosD$hubspot_owner_name%in%vendedor &
+                                contatosD$lead_source_geral_new%in%lead_source_geral &
+                                contatosD$lead_source_new%in%lead_source &
+                                contatosD$ecommerce_platform%in%ecommerce_platform))
+
+    convertido <- length(which(!is.na(contatosD$reuniao_date) &
+                                 contatosD$reuniao_date>=dataRef &
+                                 contatosD$reuniao_date<=dataFinal &
+                                 !is.na(contatosD$convertido_date) &
+                                 contatosD$convertido_date>=dataRef &
+                                 contatosD$convertido_date<=dataFinal &
+                                 contatosD$hubspot_owner_name%in%vendedor &
+                                 contatosD$lead_source_geral_new%in%lead_source_geral &
+                                 contatosD$lead_source_new%in%lead_source &
+                                 contatosD$ecommerce_platform%in%ecommerce_platform &
+                                 contatos$deal_stage=="Convertido"))
+  }
+
+  final <- data.frame(deal_stage = c("Reuniao","Primeiro Contato","Qualificado","Proposta Enviada","Proposta Aceita","Em Integracao","Integrado","Convertido"),
+                      ncontacts = c(reuniao,pcontato,qualificado,penviada,paceita,emintegracao,integrado,convertido))
+
+  return (final)
+}
+#cria grupos de faturamento
+criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_geral = "all", lead_source = "all", type = "safra", ecommerce_platform = "all",
+                                    dataRef = NULL, Q = NULL, dataFinal = NULL){
+  ## set vectors for all option ##
+  if (vendedor == "all"){
+    vendedor <- unique(contatos$hubspot_owner_name)
+  }
+  if (lead_source_geral == "all"){
+    lead_source_geral <- unique(contatos$lead_source_geral_new)
+  }
+  if (lead_source == "all"){
+    lead_source <- unique(contatos$lead_source_new)
+  }
+  if (ecommerce_platform == "all"){
+    ecommerce_platform <- unique(contatos$ecommerce_platform)
+  }
+  #arrange contacts dates
+  #contatosD <- suppressWarnings(arrangeDate (contatos))
+  contatosD <- contatos
+  ## visao do mes ##
+  if (type == "mes"){
+    if (is.null(dataRef)){
+      dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
+    }else{
+      if (is.null(dataFinal)){
+        dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+      }
+      #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
     }
 
     F0 <- length(which(!is.na(contatosD$convertido_date) &
@@ -731,7 +731,7 @@ criaGrupodeFaturamento <- function (contatos, vendedor = "all", lead_source_gera
                          contatosD$lead_source_new%in%lead_source &
                          contatosD$ecommerce_platform%in%ecommerce_platform &
                          (is.na(contatosD$faturamento_grupo) |
-                         (contatosD$faturamento_grupo=="")) &
+                            (contatosD$faturamento_grupo=="")) &
                          contatos$deal_stage=="Convertido"))
 
   }
@@ -1086,76 +1086,76 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
     if (is.null(dataRef)){
       dataRef <- as.Date(paste(year(now()),"-",month(now()),"-01",sep=""))
     }else{
-        if (is.null(dataFinal)){
-            dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
-        }
-        #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
+      if (is.null(dataFinal)){
+        dataFinal <- as.Date(paste(year(dataRef),"-",month(dataRef)+1,"-01",sep=""))
+      }
+      #dataRef <- as.Date(paste(year(dataRef),"-",month(dataRef),"-01",sep=""))
     }
 
     reuniao <- contatosD[(!is.na(contatosD$reuniao_date) &
-                              (contatosD$reuniao_date>=dataRef) &
-                              (contatosD$reuniao_date<=dataFinal) &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+                            (contatosD$reuniao_date>=dataRef) &
+                            (contatosD$reuniao_date<=dataFinal) &
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     pcontato <- contatosD[(!is.na(contatosD$prim_contato_date) &
-                               (contatosD$prim_contato_date>=dataRef) &
-                               (contatosD$prim_contato_date<=dataFinal) &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
+                             (contatosD$prim_contato_date>=dataRef) &
+                             (contatosD$prim_contato_date<=dataFinal) &
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     qualificado <- contatosD[(!is.na(contatosD$qualificado_date) &
-                                  (contatosD$qualificado_date>=dataRef) &
-                                  (contatosD$qualificado_date<=dataFinal) &
-                                  contatosD$hubspot_owner_name%in%vendedor &
-                                  contatosD$lead_source_geral_new%in%lead_source_geral &
-                                  contatosD$lead_source_new%in%lead_source &
-                                  contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    penviada <- contatosD[(!is.na(contatosD$prop_enviada_date) &
-                               (contatosD$prop_enviada_date>=dataRef) &
-                               (contatosD$prop_enviada_date<=dataFinal) &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    paceita <- contatosD[(!is.na(contatosD$prop_aceita_date) &
-                              (contatosD$prop_aceita_date>=dataRef) &
-                              (contatosD$prop_aceita_date<=dataFinal) &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    emintegracao <- contatosD[(!is.na(contatosD$em_integracao_date) &
-                                   (contatosD$em_integracao_date>=dataRef) &
-                                   (contatosD$em_integracao_date<=dataFinal) &
-                                   contatosD$hubspot_owner_name%in%vendedor &
-                                   contatosD$lead_source_geral_new%in%lead_source_geral &
-                                   contatosD$lead_source_new%in%lead_source &
-                                   contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    integrado <- contatosD[(!is.na(contatosD$integrado_date) &
-                                (contatosD$integrado_date>=dataRef) &
-                                (contatosD$integrado_date<=dataFinal) &
+                                (contatosD$qualificado_date>=dataRef) &
+                                (contatosD$qualificado_date<=dataFinal) &
                                 contatosD$hubspot_owner_name%in%vendedor &
                                 contatosD$lead_source_geral_new%in%lead_source_geral &
                                 contatosD$lead_source_new%in%lead_source &
                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
 
-    convertido <- contatosD[(!is.na(contatosD$convertido_date) &
-                                 (contatosD$convertido_date>=dataRef) &
-                                 (contatosD$convertido_date<=dataFinal) &
+    penviada <- contatosD[(!is.na(contatosD$prop_enviada_date) &
+                             (contatosD$prop_enviada_date>=dataRef) &
+                             (contatosD$prop_enviada_date<=dataFinal) &
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    paceita <- contatosD[(!is.na(contatosD$prop_aceita_date) &
+                            (contatosD$prop_aceita_date>=dataRef) &
+                            (contatosD$prop_aceita_date<=dataFinal) &
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    emintegracao <- contatosD[(!is.na(contatosD$em_integracao_date) &
+                                 (contatosD$em_integracao_date>=dataRef) &
+                                 (contatosD$em_integracao_date<=dataFinal) &
                                  contatosD$hubspot_owner_name%in%vendedor &
                                  contatosD$lead_source_geral_new%in%lead_source_geral &
                                  contatosD$lead_source_new%in%lead_source &
-                                 contatosD$ecommerce_platform%in%ecommerce_platform &
-                                 contatos$deal_stage=="Convertido"),]
+                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    integrado <- contatosD[(!is.na(contatosD$integrado_date) &
+                              (contatosD$integrado_date>=dataRef) &
+                              (contatosD$integrado_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    convertido <- contatosD[(!is.na(contatosD$convertido_date) &
+                               (contatosD$convertido_date>=dataRef) &
+                               (contatosD$convertido_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform &
+                               contatos$deal_stage=="Convertido"),]
   }
   ## visao de trimestral ##
   else if (type == "tri"){
@@ -1194,69 +1194,69 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
     day(dataFinal) <- days_in_month(dataFinal)
 
     reuniao <- contatosD[(!is.na(contatosD$reuniao_date) &
-                              (contatosD$reuniao_date>=dataRef) &
-                              (contatosD$reuniao_date<=dataFinal) &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+                            (contatosD$reuniao_date>=dataRef) &
+                            (contatosD$reuniao_date<=dataFinal) &
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     pcontato <- contatosD[(!is.na(contatosD$prim_contato_date) &
-                               (contatosD$prim_contato_date>=dataRef) &
-                               (contatosD$prim_contato_date<=dataFinal) &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
+                             (contatosD$prim_contato_date>=dataRef) &
+                             (contatosD$prim_contato_date<=dataFinal) &
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     qualificado <- contatosD[(!is.na(contatosD$qualificado_date) &
-                                  (contatosD$qualificado_date>=dataRef) &
-                                  (contatosD$qualificado_date<=dataFinal) &
-                                  contatosD$hubspot_owner_name%in%vendedor &
-                                  contatosD$lead_source_geral_new%in%lead_source_geral &
-                                  contatosD$lead_source_new%in%lead_source &
-                                  contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    penviada <- contatosD[(!is.na(contatosD$prop_enviada_date) &
-                               (contatosD$prop_enviada_date>=dataRef) &
-                               (contatosD$prop_enviada_date<=dataFinal) &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    paceita <- contatosD[(!is.na(contatosD$prop_aceita_date) &
-                              (contatosD$prop_aceita_date>=dataRef) &
-                              (contatosD$prop_aceita_date<=dataFinal) &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    emintegracao <- contatosD[(!is.na(contatosD$em_integracao_date) &
-                                   (contatosD$em_integracao_date>=dataRef) &
-                                   (contatosD$em_integracao_date<=dataFinal) &
-                                   contatosD$hubspot_owner_name%in%vendedor &
-                                   contatosD$lead_source_geral_new%in%lead_source_geral &
-                                   contatosD$lead_source_new%in%lead_source &
-                                   contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    integrado <- contatosD[(!is.na(contatosD$integrado_date) &
-                                (contatosD$integrado_date>=dataRef) &
-                                (contatosD$integrado_date<=dataFinal) &
+                                (contatosD$qualificado_date>=dataRef) &
+                                (contatosD$qualificado_date<=dataFinal) &
                                 contatosD$hubspot_owner_name%in%vendedor &
                                 contatosD$lead_source_geral_new%in%lead_source_geral &
                                 contatosD$lead_source_new%in%lead_source &
                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
 
-    convertido <- contatosD[(!is.na(contatosD$convertido_date) &
-                                 (contatosD$convertido_date>=dataRef) &
-                                 (contatosD$convertido_date<=dataFinal) &
+    penviada <- contatosD[(!is.na(contatosD$prop_enviada_date) &
+                             (contatosD$prop_enviada_date>=dataRef) &
+                             (contatosD$prop_enviada_date<=dataFinal) &
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    paceita <- contatosD[(!is.na(contatosD$prop_aceita_date) &
+                            (contatosD$prop_aceita_date>=dataRef) &
+                            (contatosD$prop_aceita_date<=dataFinal) &
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    emintegracao <- contatosD[(!is.na(contatosD$em_integracao_date) &
+                                 (contatosD$em_integracao_date>=dataRef) &
+                                 (contatosD$em_integracao_date<=dataFinal) &
                                  contatosD$hubspot_owner_name%in%vendedor &
                                  contatosD$lead_source_geral_new%in%lead_source_geral &
                                  contatosD$lead_source_new%in%lead_source &
-                                 contatosD$ecommerce_platform%in%ecommerce_platform &
-                                 contatos$deal_stage=="Convertido"),]
+                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    integrado <- contatosD[(!is.na(contatosD$integrado_date) &
+                              (contatosD$integrado_date>=dataRef) &
+                              (contatosD$integrado_date<=dataFinal) &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    convertido <- contatosD[(!is.na(contatosD$convertido_date) &
+                               (contatosD$convertido_date>=dataRef) &
+                               (contatosD$convertido_date<=dataFinal) &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform &
+                               contatos$deal_stage=="Convertido"),]
 
   }
   ## visao de safra ##
@@ -1269,90 +1269,90 @@ filtraContatos <- function (contatos, vendedor = "all", lead_source_geral = "all
     }
 
     reuniao <- contatosD[(!is.na(contatosD$reuniao_date) &
-                              contatosD$reuniao_date>=dataRef &
+                            contatosD$reuniao_date>=dataRef &
                             contatosD$reuniao_date<=dataFinal &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     pcontato <- contatosD[(!is.na(contatosD$reuniao_date) &
-                               contatosD$reuniao_date>=dataRef &
+                             contatosD$reuniao_date>=dataRef &
                              contatosD$reuniao_date<=dataFinal &
-                               !is.na(contatosD$prim_contato_date) &
+                             !is.na(contatosD$prim_contato_date) &
                              contatosD$prim_contato_date>=dataRef &
                              contatosD$prim_contato_date<=dataFinal &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
 
     qualificado <- contatosD[(!is.na(contatosD$reuniao_date) &
-                                  contatosD$reuniao_date>=dataRef &
+                                contatosD$reuniao_date>=dataRef &
                                 contatosD$reuniao_date<=dataFinal &
-                                  !is.na(contatosD$qualificado_date) &
+                                !is.na(contatosD$qualificado_date) &
                                 contatosD$qualificado_date>=dataRef &
                                 contatosD$qualificado_date<=dataFinal &
-                                  contatosD$hubspot_owner_name%in%vendedor &
-                                  contatosD$lead_source_geral_new%in%lead_source_geral &
-                                  contatosD$lead_source_new%in%lead_source &
-                                  contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    penviada <- contatosD[(!is.na(contatosD$reuniao_date) &
-                               contatosD$reuniao_date>=dataRef &
-                             contatosD$reuniao_date<=dataFinal &
-                               !is.na(contatosD$prop_enviada_date) &
-                             contatosD$prop_enviada_date>=dataRef &
-                             contatosD$prop_enviada_date<=dataFinal &
-                               contatosD$hubspot_owner_name%in%vendedor &
-                               contatosD$lead_source_geral_new%in%lead_source_geral &
-                               contatosD$lead_source_new%in%lead_source &
-                               contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    paceita <- contatosD[(!is.na(contatosD$reuniao_date) &
-                              contatosD$reuniao_date>=dataRef &
-                            contatosD$reuniao_date<=dataFinal &
-                              !is.na(contatosD$prop_aceita_date) &
-                            contatosD$prop_aceita_date>=dataRef &
-                            contatosD$prop_aceita_date<=dataFinal &
-                              contatosD$hubspot_owner_name%in%vendedor &
-                              contatosD$lead_source_geral_new%in%lead_source_geral &
-                              contatosD$lead_source_new%in%lead_source &
-                              contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    emintegracao <- contatosD[(!is.na(contatosD$reuniao_date) &
-                                   contatosD$reuniao_date>=dataRef &
-                                 contatosD$reuniao_date<=dataFinal &
-                                   !is.na(contatosD$em_integracao_date) &
-                                 contatosD$em_integracao_date>=dataRef &
-                                 contatosD$em_integracao_date<=dataFinal &
-                                   contatosD$hubspot_owner_name%in%vendedor &
-                                   contatosD$lead_source_geral_new%in%lead_source_geral &
-                                   contatosD$lead_source_new%in%lead_source &
-                                   contatosD$ecommerce_platform%in%ecommerce_platform),]
-
-    integrado <- contatosD[(!is.na(contatosD$reuniao_date) &
-                                contatosD$reuniao_date>=dataRef &
-                              contatosD$reuniao_date<=dataFinal &
-                                !is.na(contatosD$integrado_date) &
-                              contatosD$integrado_date>=dataRef &
-                              contatosD$integrado_date<=dataFinal &
                                 contatosD$hubspot_owner_name%in%vendedor &
                                 contatosD$lead_source_geral_new%in%lead_source_geral &
                                 contatosD$lead_source_new%in%lead_source &
                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
 
-    convertido <- contatosD[(!is.na(contatosD$reuniao_date) &
+    penviada <- contatosD[(!is.na(contatosD$reuniao_date) &
+                             contatosD$reuniao_date>=dataRef &
+                             contatosD$reuniao_date<=dataFinal &
+                             !is.na(contatosD$prop_enviada_date) &
+                             contatosD$prop_enviada_date>=dataRef &
+                             contatosD$prop_enviada_date<=dataFinal &
+                             contatosD$hubspot_owner_name%in%vendedor &
+                             contatosD$lead_source_geral_new%in%lead_source_geral &
+                             contatosD$lead_source_new%in%lead_source &
+                             contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    paceita <- contatosD[(!is.na(contatosD$reuniao_date) &
+                            contatosD$reuniao_date>=dataRef &
+                            contatosD$reuniao_date<=dataFinal &
+                            !is.na(contatosD$prop_aceita_date) &
+                            contatosD$prop_aceita_date>=dataRef &
+                            contatosD$prop_aceita_date<=dataFinal &
+                            contatosD$hubspot_owner_name%in%vendedor &
+                            contatosD$lead_source_geral_new%in%lead_source_geral &
+                            contatosD$lead_source_new%in%lead_source &
+                            contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    emintegracao <- contatosD[(!is.na(contatosD$reuniao_date) &
                                  contatosD$reuniao_date>=dataRef &
-                               contatosD$reuniao_date<=dataFinal &
-                                 !is.na(contatosD$convertido_date) &
-                               contatosD$convertido_date>=dataRef &
-                               contatosD$convertido_date<=dataFinal &
+                                 contatosD$reuniao_date<=dataFinal &
+                                 !is.na(contatosD$em_integracao_date) &
+                                 contatosD$em_integracao_date>=dataRef &
+                                 contatosD$em_integracao_date<=dataFinal &
                                  contatosD$hubspot_owner_name%in%vendedor &
                                  contatosD$lead_source_geral_new%in%lead_source_geral &
                                  contatosD$lead_source_new%in%lead_source &
-                                 contatosD$ecommerce_platform%in%ecommerce_platform &
-                                 contatos$deal_stage=="Convertido"),]
+                                 contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    integrado <- contatosD[(!is.na(contatosD$reuniao_date) &
+                              contatosD$reuniao_date>=dataRef &
+                              contatosD$reuniao_date<=dataFinal &
+                              !is.na(contatosD$integrado_date) &
+                              contatosD$integrado_date>=dataRef &
+                              contatosD$integrado_date<=dataFinal &
+                              contatosD$hubspot_owner_name%in%vendedor &
+                              contatosD$lead_source_geral_new%in%lead_source_geral &
+                              contatosD$lead_source_new%in%lead_source &
+                              contatosD$ecommerce_platform%in%ecommerce_platform),]
+
+    convertido <- contatosD[(!is.na(contatosD$reuniao_date) &
+                               contatosD$reuniao_date>=dataRef &
+                               contatosD$reuniao_date<=dataFinal &
+                               !is.na(contatosD$convertido_date) &
+                               contatosD$convertido_date>=dataRef &
+                               contatosD$convertido_date<=dataFinal &
+                               contatosD$hubspot_owner_name%in%vendedor &
+                               contatosD$lead_source_geral_new%in%lead_source_geral &
+                               contatosD$lead_source_new%in%lead_source &
+                               contatosD$ecommerce_platform%in%ecommerce_platform &
+                               contatos$deal_stage=="Convertido"),]
   }
 
   reuniao$estagio <- "Reuniao"
@@ -1404,6 +1404,8 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
   start_time <- Sys.time()
   print("Working on it...")
 
+  #dataRaw <- dataRaw[,-1]
+
   if (is.null(dataRaw)){
     if (is.null(path)) {
       path <- readline(prompt="Enter complete file path: ")
@@ -1413,61 +1415,75 @@ cohortSummary <- function (dataRaw = NULL, tpv_group = "all", path = NULL) {
     }
     dataRaw<- read.csv(path,stringsAsFactors = FALSE,encoding = "UTF-8")
 
-    dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
+    #dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
 
-    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
-                        "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
-                        "n_payments")
+    #names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
+    #                    "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
+    #                    "n_payments")
+
+    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth", "tpv","receita")
+
   }else if (is.null(dataRaw$owner_name)){
     dataRaw$owner_name <- NA
-    dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
+    #dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
 
-    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
-                        "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
-                        "n_payments", "owner_name")
+    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth", "tpv","receita",
+                        "owner_name")
+
+    #names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
+    #                    "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
+    #                    "n_payments", "owner_name")
   }else {
-    dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
+    #dataRaw$tpv.group[dataRaw$tpv.group=="Large"]<-"F5"
 
-    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
-                        "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
-                        "n_payments", "owner_name")
+    names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth", "tpv","receita",
+                        "owner_name")
+    #names(dataRaw) <- c("account_id","tpv_group_bd","login","payment_date","account_fauth","state","super_integrator", "tpv","receita",
+    #                    "n_payments_submitted", "n_payments_canceled", "n_payments_authorized", "n_payments_analysis", "n_payments_pre",
+    #                    "n_payments", "owner_name")
   }
 
 
   grp_data <- group_by(dataRaw, account_id, login, tpv_group_bd, account_fauth, payment_date)
-  sum_data <- summarise(grp_data, tpv = sum(tpv), receita = sum(receita), n_payments_submitted = sum(n_payments_submitted),
-                        n_payments_canceled = sum(n_payments_canceled), n_payments_authorized = sum(n_payments_authorized),
-                        n_payments_analysis = sum(n_payments_analysis), n_payments_pre = sum(n_payments_pre),
-                        n_payments = sum(n_payments))
+  # sum_data <- summarise(grp_data, tpv = sum(tpv, na.rm = TRUE), receita = sum(receita, na.rm = TRUE), n_payments_submitted = sum(n_payments_submitted),
+  #                       n_payments_canceled = sum(n_payments_canceled), n_payments_authorized = sum(n_payments_authorized),
+  #                       n_payments_analysis = sum(n_payments_analysis), n_payments_pre = sum(n_payments_pre),
+  #                       n_payments = sum(n_payments))
+  sum_data <- summarise(grp_data, tpv = sum(tpv, na.rm = TRUE), receita = sum(receita, na.rm = TRUE), n_month = n())
+  sum_data$payment_date <- as.yearmon(sum_data$payment_date,"%Y-%m")
+  sum_data$account_fauth <- as.Date(sum_data$account_fauth)
+  sum_data$account_fauth <- as.yearmon(sum_data$account_fauth,"%m/%Y")
 
-  fatData <- sum_data[!(sum_data$payment_date==""),]
-  grp_fat <- group_by(fatData, account_id)
-  sum_fat <- summarise(grp_fat, tpv = max(tpv, na.rm = TRUE))
+  fatData <- sum_data[!is.na(sum_data$payment_date),]
+  saida <- getFaturamento(fatData, type = "mean")
 
-  sum_fat$tpv_group<-NA
-  sum_fat$tpv_group[sum_fat$tpv >=0 & sum_fat$tpv <1000] <- "F0"
-  sum_fat$tpv_group[sum_fat$tpv >=1000 & sum_fat$tpv <5000] <- "F1"
-  sum_fat$tpv_group[sum_fat$tpv >=5000 & sum_fat$tpv <20000] <- "F2"
-  sum_fat$tpv_group[sum_fat$tpv >=20000 & sum_fat$tpv <100000] <- "F3"
-  sum_fat$tpv_group[sum_fat$tpv >=100000 & sum_fat$tpv <500000] <- "F4"
-  sum_fat$tpv_group[sum_fat$tpv >=500000 & sum_fat$tpv <1000000] <- "F5"
-  sum_fat$tpv_group[sum_fat$tpv >=1000000 & sum_fat$tpv <5000000] <- "F6"
-  sum_fat$tpv_group[sum_fat$tpv >=5000000 & sum_fat$tpv] <- "F7"
+  #grp_fat <- group_by(fatData, account_id)
+  #sum_fat <- summarise(grp_fat, tpv = max(tpv, na.rm = TRUE))
 
-  sum_fat <- sum_fat[,c(which(names(sum_fat)=="account_id"),which(names(sum_fat)=="tpv_group"))]
+  # sum_fat$tpv_group<-NA
+  # sum_fat$tpv_group[sum_fat$tpv >=0 & sum_fat$tpv <1000] <- "F0"
+  # sum_fat$tpv_group[sum_fat$tpv >=1000 & sum_fat$tpv <5000] <- "F1"
+  # sum_fat$tpv_group[sum_fat$tpv >=5000 & sum_fat$tpv <20000] <- "F2"
+  # sum_fat$tpv_group[sum_fat$tpv >=20000 & sum_fat$tpv <100000] <- "F3"
+  # sum_fat$tpv_group[sum_fat$tpv >=100000 & sum_fat$tpv <500000] <- "F4"
+  # sum_fat$tpv_group[sum_fat$tpv >=500000 & sum_fat$tpv <1000000] <- "F5"
+  # sum_fat$tpv_group[sum_fat$tpv >=1000000 & sum_fat$tpv <5000000] <- "F6"
+  # sum_fat$tpv_group[sum_fat$tpv >=5000000 & sum_fat$tpv] <- "F7"
 
-  sum_data <- merge(sum_data, sum_fat, by = "account_id", all = TRUE)
+  #sum_fat <- sum_fat[,c(which(names(sum_fat)=="account_id"),which(names(sum_fat)=="tpv_group"))]
+
+  sum_data <- merge(sum_data, saida, by = "account_id", all = TRUE)
 
   if (tpv_group == "all") {
     tpv_group <- unique(sum_data$tpv_group)
   }
 
-  data <- sum_data[sum_data$tpv_group%in%tpv_group&!(sum_data$payment_date==""),]
+  data <- sum_data[sum_data$tpv_group%in%tpv_group&!is.na(sum_data$payment_date),]
   #data <- dataRaw[dataRaw$tpv.group%in%tpv_group,]
 
 
 
-  data$payment_date <- as.yearmon(data$payment_date,"%m/%Y")
+  data$payment_date <- as.yearmon(data$payment_date,"%Y-%m")
   data$account_fauth <- as.Date(data$account_fauth)
   data$account_fauth <- as.yearmon(data$account_fauth,"%m/%Y")
 
@@ -1581,6 +1597,7 @@ churnBase <- function(base , comercial, churn_time = 4, tpv_group = c("F0","F1",
 
   #comercial<- read.csv("C:/Users/mauricio.chigutti/Google Drive/Clientes do Comercial/clientesComercial.csv",
   #                     stringsAsFactors = FALSE, sep = ";")
+  names(base) <- c("account.id","tpv_group_bd","login","payment_date","account_fauth", "tpv","receita")
   comercial <- comercial[comercial$Account.Id!=0,c(2,3)]
   names(comercial) <- c("owner_name","account.id")
 
@@ -1628,6 +1645,47 @@ churnBase <- function(base , comercial, churn_time = 4, tpv_group = c("F0","F1",
   final$client_perc <- 1-client_perc
 
   return (final)
+}
+#logica de grupo de fat
+getFaturamento <- function(base, type = "max"){
+  if (type == "max"){
+    grp_fat <- group_by(base, account_id)
+    sum_fat <- summarise(base, tpv = max(tpv, na.rm = TRUE))
+
+    sum_fat$tpv_group<-NA
+    sum_fat$tpv_group[sum_fat$tpv >=0 & sum_fat$tpv <1000] <- "F0"
+    sum_fat$tpv_group[sum_fat$tpv >=1000 & sum_fat$tpv <5000] <- "F1"
+    sum_fat$tpv_group[sum_fat$tpv >=5000 & sum_fat$tpv <20000] <- "F2"
+    sum_fat$tpv_group[sum_fat$tpv >=20000 & sum_fat$tpv <100000] <- "F3"
+    sum_fat$tpv_group[sum_fat$tpv >=100000 & sum_fat$tpv <500000] <- "F4"
+    sum_fat$tpv_group[sum_fat$tpv >=500000 & sum_fat$tpv <1000000] <- "F5"
+    sum_fat$tpv_group[sum_fat$tpv >=1000000 & sum_fat$tpv <5000000] <- "F6"
+    sum_fat$tpv_group[sum_fat$tpv >=5000000 & sum_fat$tpv] <- "F7"
+
+    sum_fat <- sum_fat[,c(which(names(sum_fat)=="account_id"),which(names(sum_fat)=="tpv_group"))]
+  }else {
+    fat_break <- dcast(data = base, formula = account_id ~ payment_date, value.var = "tpv")
+
+    fat_resume <- fat_break[,2:dim(fat_break)[2]]
+    fat_resume <- apply(fat_resume, 1, FUN = function(x){mean(tail(na.omit(unique(as.numeric(x))),n = 6), na.rm = TRUE)})
+
+    sum_fat <- data.frame(account_id = fat_break$account_id, tpv_mean = fat_resume)
+
+    sum_fat$tpv_group<-NA
+    sum_fat$tpv_group[sum_fat$tpv_mean >=0 & sum_fat$tpv_mean <1000] <- "F0"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=1000 & sum_fat$tpv_mean <5000] <- "F1"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=5000 & sum_fat$tpv_mean <20000] <- "F2"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=20000 & sum_fat$tpv_mean <100000] <- "F3"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=100000 & sum_fat$tpv_mean <500000] <- "F4"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=500000 & sum_fat$tpv_mean <1000000] <- "F5"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=1000000 & sum_fat$tpv_mean <5000000] <- "F6"
+    sum_fat$tpv_group[sum_fat$tpv_mean >=5000000 & sum_fat$tpv_mean] <- "F7"
+
+    sum_fat <- sum_fat[,c(which(names(sum_fat)=="account_id"),which(names(sum_fat)=="tpv_group"))]
+
+  }
+
+  return(sum_fat)
 }
 #le base do goodata para cohort
 getCohortBase <- function(path = "C:/Users/mauricio.chigutti/Google Drive/Cohort/Churn4.csv"){
@@ -1688,7 +1746,7 @@ funilTempoMedio <- function(contatos, vendedor = "all", lead_source_geral = "all
   unicos$AteConverter <- as.Date(unicos$convertido_date)-as.Date(unicos$reuniao_date)
 
   final_unicos <- unicos[unicos$hubspot_owner_name%in% vendedor & unicos$lead_source_geral_new%in%lead_source_geral &
-                    unicos$lead_source_new%in%lead_source & unicos$ecommerce_platform%in%ecommerce_platform,]
+                           unicos$lead_source_new%in%lead_source & unicos$ecommerce_platform%in%ecommerce_platform,]
 
   group <- group_by(final_unicos, hubspot_owner_name)
   sm <- summarise(group, AteConverter = round(mean(AteConverter, na.rm = TRUE), digits=0), RPC = round(mean(RPC, na.rm = TRUE), digits=0),
